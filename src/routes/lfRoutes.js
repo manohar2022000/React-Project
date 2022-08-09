@@ -7,7 +7,7 @@ var cors = require('cors'),
 router
  .route("/vendors")
  .get((req,res)=>{
-
+    
     sql.connect('Server=radiare-azure.database.windows.net,1433;Database=pierian;User Id=radiare-azure;Password=Sql@2018;Encrypt=true').then(function () {
         // Query for this demo you will need values that will be plotted on the bars.
         //the column names should be: name, subtotal
@@ -23,7 +23,6 @@ router
     }).catch(function (err) {
         console.log(err);
     });
-
  }
  );
  router
@@ -50,6 +49,7 @@ router
  router
  .route("/data")
  .get((req,res)=>{
+    console.log(process.env.PORT);
     sql.connect('Server=radiare-azure.database.windows.net,1433;Database=pierian;User Id=radiare-azure;Password=Sql@2018;Encrypt=true').then(function () {
         // Query for this demo you will need values that will be plotted on the bars.
         //the column names should be: name, subtotal

@@ -113,6 +113,8 @@
           <datalist id="INVOICES">
           </datalist>
         </div>
+        <div class="col-md-2"> <button class="btn btn-sm btn-success mt-1 search btn-danger" ONCLICK="dataload()">Clear Filter</button></div>
+       
 
 
 
@@ -221,6 +223,8 @@
       function dataload() {
         var invoices = [];
         var vendors = [];
+        // alert("here");
+      
         var searchurl = 'http://localhost:5000/lf/search';
         d3.json(searchurl, function (error, data) {
 
@@ -228,12 +232,19 @@
             if (invoices.indexOf(data[i]['Invoice Number']) == -1) {
               invoices.push(data[i]['Invoice Number']);
             }
-            if (vendors.indexOf(data[i]['Vendor Name']) == -1) {
-              vendors.push(data[i]['Vendor Name']);
-            }
+            if ((vendors.indexOf(data[i]['Vendor Name']) == -1)) {
+            vendors.push(data[i]['Vendor Name']);
+          }
+          // else if(vendors.indexOf(data[i]['Supplier Name']) == -1){
+          //   vendors.push(data[i]['Supplier Name']);
+          // }
+          // else if((vendors.indexOf(data[i]['Supplier_Name']) == -1)){
+          //   vendors.push(data[i]['Supplier_Name']);
+          // }
             // invoices.push(data[i]['Invoice Number']);
           }
-
+          $("#tableDisplay").html('');
+          $("input").val('');
 
           invoices.forEach(function (item) {
             $("#INVOICES").append(`<option value='` + (item) + `'>`);
@@ -258,9 +269,36 @@
           if (invoices.indexOf(data[i]['Invoice Number']) == -1) {
             invoices.push(data[i]['Invoice Number']);
           }
-          if (vendors.indexOf(data[i]['Vendor Name']) == -1) {
+          try{
+          if ((vendors.indexOf(data[i]['Vendor Name']) == -1)) {
+            if(typeof data[i]['Vendor Name']!='undefined'){
             vendors.push(data[i]['Vendor Name']);
+            }
           }
+        }
+        catch(e){
+          console.log(e);
+        }
+        try{
+          if(vendors.indexOf(data[i]['Supplier Name']) == -1){
+            if(typeof data[i]['Supplier Name']!='undefined'){
+            vendors.push(data[i]['Supplier Name']);
+            }
+          }
+        }
+        catch(e){
+          console.log(e);
+        }
+        try{
+          if((vendors.indexOf(data[i]['Supplier_Name']) == -1)){
+            if(typeof data[i]['Supplier_Name']!='undefined'){
+            vendors.push(data[i]['Supplier_Name']);
+            }
+          }
+        }
+        catch(e){
+          console.log(e);
+        }
           // invoices.push(data[i]['Invoice Number']);
         }
 
@@ -268,6 +306,7 @@
         invoices.forEach(function (item) {
           $("#INVOICES").append(`<option value='` + (item) + `'>`);
         })
+        console.log(vendors); 
         vendors.forEach(function (item) {
           $("#Vendors").append(`<option value='` + (item) + `'>`);
         })
