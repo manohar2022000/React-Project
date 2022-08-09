@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<link href="public_assets/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="public_assets/dashboard.css" rel="stylesheet">
+<body>
+  <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-3" href="/">
+      <img src="../assets/Img/logo.png" alt="" width="35" height="35" class="d-inline-block align-text-top">
+      Pierian
+    </a>
+
+    <!-- <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">Pierian</a> -->
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+      data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/lf">LF</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/sp">Seller Portal</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/aptb">OFA - APTB</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/appayment">OFA - AP Payment</a>
+      </li>
+    </ul>
+
+    <div class="navbar-nav">
+    
+    </div>
+  </header>
+  <main class="col-md-11 col-lg-11 m-3">
+
+    <div
+      class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2 mb-3 border-bottom text-center">
+      <!-- <h4></h4> -->
+      <!-- <h4>APTB DATA</h4> -->
+
+      <!-- <div class="btn-toolbar mb-2 mb-md-0"> -->
+      <!-- <div class="dropdown"> -->
+      <!-- <button onclick="myFunction()" class="dropbtn"><h6>Invoice Search</h6></button> -->
+      <!-- <div id="myDropdown" class="dropdown-content" >
+            <input class ="border border-dark" type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+          </div> -->
+      <!-- </div> -->
+
+      <div class="col-md-2"> <input placeholder="Select Seller" list="Sellers" name="Seller" id="Seller">
+        <datalist id="Sellers">
+        </datalist>
+      </div>
+      <div class="col-md-3"></div>
+      <div class="col-md-2"><input placeholder="Select Vendor" list="Vendors" name="Vendor" id="Vendor">
+        <datalist id="Vendors">
+        </datalist>
+      </div>
+
+
+      <div class="col-md-2"><input placeholder="Select Invoice" list="INVOICES" name="INVOICE" id="INVOICE">
+        <datalist id="INVOICES">
+        </datalist>
+      </div>
+      <!-- <div class="col-md-1"></div> -->
+      <!-- <button class="btn btn-sm btn-primary search"  ONCLICK="dataload()">Submit</button> -->
+
+
+      <!-- <div class="col-md-1"></div> -->
+      <div class="col-md-2"> <button class="btn btn-sm btn-success search" ONCLICK="dataload()">Apply</button></div>
+      <button class="btn btn-sm btn-success search btn-danger" ONCLICK="clearfilter()">Clear Filter</button>
+      <div class="btn-group me-2 mr-4">
+
+      </div>
+      <!-- <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+          <span data-feather="calendar" class="align-text-bottom"></span>
+          This week
+        </button> -->
+      <!-- </div> -->
+    </div>
+
+    <!-- <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"> -->
+    <div id="tableDisplay" style="overflow-x: scroll;height:400px;width:1250px">        </div>
+    <!-- </div> -->
+  </main>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script>
+  </script>
+  <script>
+
+
+    // GET DATA from DB
+
+    var url = 'http://localhost:5000/lf/data';
+    // var sellerurl = 'http://localhost:5000/lf/sellers';
+    // var vendorurl = 'http://localhost:5000/lf/vendors';
+    // var invoiceurl = 'http://localhost:5000/lf/invoices'
+    // sellerload();
+    // vendorload();
+    // invoiceload();
+    dataload();
+    function invoiceload() {
+      d3.json(invoiceurl, function (error, data) {
+        // console.log(data);
+        var invoiceitems = [];
+        for (var j = 0; j < data.length; j++) {
+          $("#INVOICES").append(`<option value='` + (data[j]['Invoice Number']) + `'>`);
+          invoiceitems.push(data[j]['Invoice Number']);
+        }
+      });
+    }
+    function clearfilter(){
+      document.getElementById('INVOICE').value='';
+      document.getElementById('Seller').value='';
+      document.getElementById('Vendor').value='';
+      dataload();
+    }
+
+    function vendorload() {
+      d3.json(vendorurl, function (error, data) {
+        // console.log(data);
+        var vendorsitems = [];
+        for (var j = 0; j < data.length; j++) {
+          $("#Vendors").append(`<option value='` + (data[j]['Vendor Name']) + `'>`);
+          vendorsitems.push(data[j]['Vendor Name']);
+        }
+      });
+    }
+
+    function sellerload() {
+      // alert("seller");
+      d3.json(sellerurl, function (error, data) {
+        // console.log(data);
+        var selleritems = [];
+        for (var j = 0; j < data.length; j++) {
+          $("#Sellers").append(`<option value='` + data[j]['Seller Name'] + `'>`);
+          selleritems.push(data[j]['Seller Name']);
+        }
+      });
+    }
+    function dataload() {
+
+      var invoice_search = document.getElementById('INVOICE').value;
+      var seller_search = document.getElementById('Seller').value;
+      var vendor_search = document.getElementById('Vendor').value;
+
+
+      d3.json(url, function (error, data) {
+
+        function tabulate(data, columns) {
+          var invoiceitems = [];
+          var selleritems = [];
+          var vendoritems = [];
+          // for (var i = 0; i < data.length; i++) {
+          //   $("#INVOICES").append(`<option value='` + data[i]['Invoice Number'] + `'>`);
+          //   dropitems.push(data[i]['Invoice Number']);
+          // }
+
+
+ for (var i = 0; i < data.length; i++) {
+
+
+
+  if (invoiceitems.indexOf(data[i]['Invoice Number']) == -1) {
+    invoiceitems.push(data[i]['Invoice Number']);
+}
+
+if ( vendoritems.indexOf(data[i]['Vendor Name']) == -1) {
+    vendoritems.push(data[i]['Vendor Name']);
+}
+
+if (selleritems.indexOf(data[i]['Seller Name']) == -1) {
+    selleritems.push(data[i]['Seller Name']);
+}
+
+
+            // invoiceitems.push(data[i]['Invoice Number']);
+            // vendoritems.push(data[i]['Vendor Name']);
+            // selleritems.push(data[i]['Seller Name']);
+          }
+//           console.log(selleritems);
+// console.log(vendoritems);
+
+          var table = d3.select('#tableDisplay').append('table')
+          var thead = table.append('thead')
+          var tbody = table.append('tbody');
+          // append the header row
+          thead.append('tr')
+            .selectAll('th')
+            .data(columns).enter()
+            .append('th')
+            .text(function (column) { return column; })
+            .style('background-color', '#4096e6')
+            .style('color', 'white')
+            .style('text-align', 'center')
+            .style('border', '1px solid #ddd')
+            .style('padding', '8px');
+
+          // create a row for each object in the data
+          var rows = tbody.selectAll('tr')
+            .data(data)
+            .enter()
+            .append('tr');
+
+          // create a cell in each row for each column
+          var cells = rows.selectAll('td')
+            .data(function (row) {
+              return columns.map(function (column) {
+                return { column: column, value: row[column] };
+              });
+            })
+            .enter()
+            .append('td')
+            .text(function (d) { return d.value; })
+            .style('padding', '8px')
+            .style('border', '1px solid #ddd')
+            .style('background-color', '#f2f2f2')
+
+
+
+//filter push 
+
+document.getElementById('Vendors').textContent = "";
+document.getElementById('INVOICES').textContent = "";
+document.getElementById('Sellers').textContent = "";
+vendoritems.forEach(function(item){
+  $("#Vendors").append(`<option value='` + (item) + `'>`);
+})
+
+invoiceitems.forEach(function(item){
+$("#INVOICES").append(`<option value='` + (item) + `'>`);
+
+})
+selleritems.forEach(function(item){
+$("#Sellers").append(`<option value='` + (item) + `'>`);
+})
+
+          return table;
+        }
+        // render the table(s)
+
+
+
+        if ((invoice_search.length > 1) || (seller_search.length > 1)||(vendor_search.length > 1)) {
+          document.getElementById('tableDisplay').textContent = "";
+          var filteritems = [];
+
+          // Invoice , Seller and vendor Search
+
+          if (((seller_search.length) > 1) && ((invoice_search.length) > 1) && ((vendor_search.length) > 1)) {
+            // alert(seller_search);
+            for (var j = 0; j < data.length; j++) {
+              if (((data[j]['Seller Name']).includes(seller_search)) && ((data[j]['Invoice Number']).includes(invoice_search)) && ((data[j]['Vendor Name']).includes(vendor_search))) {
+                filteritems.push(data[j]);
+              }
+            }
+          }
+
+          // Invoice and Seller Search
+          else if (((seller_search.length) > 1) && ((invoice_search.length) > 1)) {
+            // alert(seller_search);
+            for (var j = 0; j < data.length; j++) {
+              if (((data[j]['Seller Name']).includes(seller_search)) && ((data[j]['Invoice Number']).includes(invoice_search))) {
+                filteritems.push(data[j]);
+              }
+            }
+          }
+
+          // Vendor and Seller Search
+          else if (((seller_search.length) > 1) && ((vendor_search.length) > 1)) {
+            // alert(seller_search);
+            for (var j = 0; j < data.length; j++) {
+              if (((data[j]['Seller Name']).includes(seller_search)) && ((data[j]['Vendor Name']).includes(vendor_search))) {
+                filteritems.push(data[j]);
+              }
+            }
+          }
+
+          // Vendor and invoice Search
+          else if (((invoice_search.length) > 1) && ((vendor_search.length) > 1)) {
+            // alert(seller_search);
+            for (var j = 0; j < data.length; j++) {
+              if (((data[j]['Invoice Number']).includes(invoice_search)) && ((data[j]['Vendor Name']).includes(vendor_search))) {
+                filteritems.push(data[j]);
+              }
+            }
+          }
+
+          // Invoice search
+          else if ((invoice_search.length > 1)) {
+            for (var i = 0; i < data.length; i++) {
+              if ((data[i]['Invoice Number']).includes(invoice_search)) {
+                filteritems.push(data[i]);
+              }
+            }
+          }
+
+          // Seller Search
+          else if ((seller_search.length) > 1) {
+            // alert(seller_search);
+            for (var j = 0; j < data.length; j++) {
+              if ((data[j]['Seller Name']).includes(seller_search)) {
+                filteritems.push(data[j]);
+              }
+            }
+          }
+
+          // Vendor Search
+          else if ((vendor_search.length) > 1) {
+            for (var j = 0; j < data.length; j++) {
+              if ((data[j]['Vendor Name']).includes(vendor_search)) {
+                filteritems.push(data[j]);
+              }
+            }
+          }
+
+          tabulate(filteritems, Object.keys(data[0]));
+        }
+        else {
+          document.getElementById('tableDisplay').textContent = "";
+          tabulate(data, Object.keys(data[0])); // 2 column table
+        }
+
+      });
+    }
+
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    function filterFunction() {
+      var input, filter, ul, li, a, i;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      div = document.getElementById("myDropdown");
+      a = div.getElementsByTagName("a");
+      for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          a[i].style.display = "";
+        } else {
+          a[i].style.display = "none";
+        }
+      }
+    }
+
+  </script>
+  <script src="public_assets/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+    integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+    integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
+    crossorigin="anonymous"></script>
+  <!-- <script src="dashboard.js"></script> -->
+</body>
+
+</html>

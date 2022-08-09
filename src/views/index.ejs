@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="public_assets/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="public_assets/dashboard.css" rel="stylesheet">
+<style>
+  .vertical-center {
+    margin-top: 250px;
+    position: relative;
+    top: 20%;
+    /* -ms-transform: translateY(-50%); */
+    /* transform: translateY(-50%); */
+  }
+
+  /* * {
+    box-sizing: border-box;
+  } */
+
+  #searchButton {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Float four columns side by side */
+  .column {
+    float: left;
+    text-align: center;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px 20px;
+  }
+
+  /* Remove extra left and right margins, due to padding */
+  /* .row {
+    margin: 0 -5px;
+  } */
+
+  /* Clear floats after the columns */
+  /* .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  } */
+
+  /* Responsive columns */
+  @media screen and (max-width: 600px) {
+    .column {
+      width: 100%;
+      display: block;
+      margin-bottom: 20px;
+    }
+  }
+
+  /* Style the counter cards */
+  .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    text-align: center;
+    background-color: #f1f1f1;
+  }
+</style>
+
+<body>
+
+
+  </head>
+
+  <body>
+    <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+
+      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-3" href="/">
+        <img src="../assets/Img/logo.png" alt="" width="35" height="35" class="d-inline-block align-text-top">
+        Pierian
+      </a>
+
+      <!-- <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">Pierian</a> -->
+      <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/lf">LF</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/sp">Seller Portal</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/aptb">OFA - APTB</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/appayment">OFA - AP Payment</a>
+        </li>
+      </ul>
+
+      <div class="navbar-nav">
+
+      </div>
+    </header>
+    <div class="container-auto">
+      <div class="row justify-content-md-center">
+        <div class="col-md-3">
+          <input placeholder="Select Vendor" list="Vendors" name="Vendor" id="Vendor">
+          <button class="btn" id="vendorsearchButton" onclick="vendorglobalsearch()"><img
+              src="../assets/Img/search.png"></button>
+          <datalist id="Vendors">
+          </datalist>
+        </div>
+        <div class="col-md-3">
+          <input placeholder="Select Invoice" list="INVOICES" name="INVOICE" id="INVOICE">
+          <button class="btn" id="searchButton" onclick="globalsearch()"><img src="../assets/Img/search.png"></button>
+          <datalist id="INVOICES">
+          </datalist>
+        </div>
+
+
+
+      </div>
+
+
+
+    </div>
+    <!-- </main> -->
+
+    <div class="row">
+      <div class="column">
+        <div class="card">
+          <div id="tableDisplay" style="position:relative ;height:400px;overflow-x: scroll;overflow-y: scroll">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script>
+    </script>
+    <script>
+
+
+      // GET DATA from DB
+
+      dataload();
+      function tabulate(data, columns) {
+
+
+        var table = d3.select('#tableDisplay').append('table')
+        var thead = table.append('thead')
+        var tbody = table.append('tbody');
+        // append the header row
+        thead.append('tr')
+          .selectAll('th')
+          .data(columns).enter()
+          .append('th')
+          .text(function (column) { return column; })
+          .style('background-color', '#4096e6')
+          .style('color', 'white')
+          .style('text-align', 'center')
+          .style('border', '1px solid #ddd')
+          .style('padding', '8px');
+
+        // create a row for each object in the data
+        var rows = tbody.selectAll('tr')
+          .data(data)
+          .enter()
+          .append('tr');
+
+        // create a cell in each row for each column
+        var cells = rows.selectAll('td')
+          .data(function (row) {
+            return columns.map(function (column) {
+              return { column: column, value: row[column] };
+            });
+          })
+          .enter()
+          .append('td')
+          .text(function (d) { return d.value; })
+          .style('padding', '8px')
+          .style('border', '1px solid #ddd')
+          .style('background-color', '#f2f2f2')
+          .style('padding-bootm', '100px')
+      }
+      // );
+
+
+      // <div class="row">
+      //   <div class="column">
+      //     <div class="card">
+      //       <p>Some text</p>
+      //       <p>Some text</p>
+      //     </div>
+      //   </div>
+
+
+      function tabulate2(data, columns) {
+        // console.log(data);
+        // console.log(columns);
+        // data.foreach(value=>{
+        //   console.log(value);
+
+        // })
+        // columns.foreach(value2=>{
+        //   console.log(value2);
+        // })
+        // $("#tableDisplay").append('<div class="row">');
+
+        data1 = data[0];
+        // exit();
+        for (i = 0; i < data1.length; i++) {
+          $("#tableDisplay").append('<div class="column"><div class="card">');
+          for (j = 0; j < columns.length; j++) {
+            // console.log(columns[j]+' - >'+data1[columns[j]]);
+            $("#tableDisplay").append('<p>' + columns[j] + ' : ' + data1[columns[j]] + '</p>');
+          }
+          $("#tableDisplay").append('   </div>  </div><br>');
+
+        }
+
+      }
+      function dataload() {
+        var invoices = [];
+        var vendors = [];
+        var searchurl = 'http://localhost:5000/lf/search';
+        d3.json(searchurl, function (error, data) {
+
+          for (i = 0; i < data.length; i++) {
+            if (invoices.indexOf(data[i]['Invoice Number']) == -1) {
+              invoices.push(data[i]['Invoice Number']);
+            }
+            if (vendors.indexOf(data[i]['Vendor Name']) == -1) {
+              vendors.push(data[i]['Vendor Name']);
+            }
+            // invoices.push(data[i]['Invoice Number']);
+          }
+
+
+          invoices.forEach(function (item) {
+            $("#INVOICES").append(`<option value='` + (item) + `'>`);
+          })
+
+          vendors.forEach(function (item) {
+            $("#Vendors").append(`<option value='` + (item) + `'>`);
+          })
+
+        })
+      }
+
+
+
+      function filterload(data) {
+        var invoices = [];
+        var vendors = [];
+        // var searchurl = 'http://localhost:5000/lf/search';
+        // d3.json(searchurl, function (error, data) {
+
+        for (i = 0; i < data.length; i++) {
+          if (invoices.indexOf(data[i]['Invoice Number']) == -1) {
+            invoices.push(data[i]['Invoice Number']);
+          }
+          if (vendors.indexOf(data[i]['Vendor Name']) == -1) {
+            vendors.push(data[i]['Vendor Name']);
+          }
+          // invoices.push(data[i]['Invoice Number']);
+        }
+
+
+        invoices.forEach(function (item) {
+          $("#INVOICES").append(`<option value='` + (item) + `'>`);
+        })
+        vendors.forEach(function (item) {
+          $("#Vendors").append(`<option value='` + (item) + `'>`);
+        })
+
+        // })
+      }
+
+      function globalsearch() {
+
+        $("#tableDisplay").html('');
+
+        let result = [];
+        let invoiceid = $("#INVOICE").val();
+        if (invoiceid.trim() != '') {
+          invoiceid = invoiceid.trim();
+          id = invoiceid;
+          id = id.split('/').join('___');
+          var search_url = '/universalcheck/' + id;
+
+
+          d3.json(search_url, function (error, data) {
+
+            var count = Object.keys(data).length;
+            var keys = Object.keys(data);
+            $("#INVOICES").html('');
+            $("#Vendors").html('');
+
+            for (i = 0; i < count; i++) {
+              data1 = [];
+              temp = keys[i];
+              data1.push(data[temp]);
+              // console.log(data1[0][0]);
+              // data1.push(data[keys[i]]);
+              // data2=Object.keys(data1[i]);
+              // tabulate(data1,data2)
+
+              // console.log(data[keys[i]]);
+              $("#tableDisplay").append('<h4>' + keys[i] + '</h4>');
+
+              filterload(data1[0]);
+              tabulate((data1[0]), Object.keys(data1[0][0]));
+            }
+            //           data2.push(data['APTB'][0]);
+            //           var data1 = Object.keys(data['APTB'][0]);
+            // console.log(data2);
+            // console.log(data1);
+            // tabulate(data2,data1);
+          })
+        }
+      }
+
+      function vendorglobalsearch() {
+
+        $("#tableDisplay").html('');
+
+        let result = [];
+        let invoiceid = $("#Vendor").val();
+        if (invoiceid.trim() != '') {
+          invoiceid = invoiceid.trim();
+          id = invoiceid;
+          vendorid = id.split('/').join('___');
+          // console.log("ui->" + vendorid)
+          var search_url = '/universalcheck/vendor/' + vendorid;
+
+
+          d3.json(search_url, function (error, data) {
+            // console.log(data);
+            var count = Object.keys(data).length;
+            var keys = Object.keys(data);
+
+            $("#INVOICES").html('');
+            $("#Vendors").html('');
+            for (i = 0; i < count; i++) {
+              data1 = [];
+              temp = keys[i];
+              data1.push(data[temp]);
+              // console.log(data1[0][0]);
+              // data1.push(data[keys[i]]);
+              // data2=Object.keys(data1[i]);
+              // tabulate(data1,data2)
+
+              // console.log(data[keys[i]]);
+              $("#tableDisplay").append('<h4>' + keys[i] + '</h4>');
+
+              filterload(data1[0]);
+              tabulate((data1[0]), Object.keys(data1[0][0]));
+            }
+            //           data2.push(data['APTB'][0]);
+            //           var data1 = Object.keys(data['APTB'][0]);
+            // console.log(data2);
+            // console.log(data1);
+            // tabulate(data2,data1);
+          })
+        }
+      }
+
+
+    </script>
+    <script src="public_assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+      integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+      integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
+      crossorigin="anonymous"></script>
+    <!-- <script src="dashboard.js"></script> -->
+  </body>
+
+  </html>
