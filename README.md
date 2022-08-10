@@ -28,5 +28,5 @@ bar charts using D3.js with a rest api using express.js
     npm start
     
   Browse to see charts
-   http://localhost:5000/
+   /
 ```

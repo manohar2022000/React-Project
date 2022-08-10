@@ -38,6 +38,14 @@ app.get('/', function (req, res) {
     });
 });
 
+app.get('/new', function (req, res) {
+    res.render('new', {
+        title: 'Hello from render'
+    
+    });
+});
+
+
 // app.get('/universalcheck/:id',(req,res)=>{
 // console.log(req.params);
 // })

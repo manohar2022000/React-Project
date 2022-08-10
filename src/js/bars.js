@@ -26,7 +26,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var url = 'http://localhost:5000/sales';
+var url = '/sales';
 //fetch data from rest API
 d3.json( url,  function(error, data) {
   if (error) throw error;
@@ -99,7 +99,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var url = 'http://localhost:5000/sales';
+var url = '/sales';
 //fetch data from rest API
 d3.json( url,  function(error, data) {
   if (error) throw error;

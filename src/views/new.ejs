@@ -50,7 +50,6 @@
 </head>
 
 <body>
-
     <nav class="navbar fixed-top" style="background-color: #e3f2fd; height :70px;">
         <div class="container-fluid">
             <a class="navbar-brand" style="font-size:25px;" href="/">
@@ -86,11 +85,10 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/aptb">APTB</a></li>
                                 <li><a class="dropdown-item" href="/appayment">AP PAYMENT</a></li>
-                                
                             </ul>
                         </li>
                     </ul>
-                
+
                 </div>
             </div>
         </div>
@@ -131,7 +129,7 @@
             <div class="col-md-3">
                 <div class="d-flex">
                     <div class="col-auto">
-                        <label for="Vendor" class="col-form-label">Invoice Search</label>
+                        <label for="INVOICE" class="col-form-label">Invoice Search</label>
                     </div>
                     <div class="col-md-7 ms-2">
                         <input class="form-control me-1" placeholder="" aria-label="Search" list="INVOICES"
@@ -167,20 +165,15 @@
 
     </nav>
 
-
 </body>
 <script>
     // Set Result Div Width and Height
     $("#tableDisplay").css("width", (screen.width) - 8);
     $("#tableDisplay").css("height", (screen.height) - 300);
-
     // GET DATA from DB
 
-    var url = '/lf/data';
+    var url = '/ofa/aptb-pay/data';
     dataload();
-
-
-    // Clear Filter Values and All Data
     function clearfilter() {
         document.getElementById('INVOICE').value = '';
         document.getElementById('Seller').value = '';
@@ -188,7 +181,7 @@
         dataload();
     }
 
-    // Load Data to Filters and Table
+
     function dataload() {
 
         var invoice_search = document.getElementById('INVOICE').value;
@@ -202,7 +195,6 @@
                 var invoiceitems = [];
                 var selleritems = [];
                 var vendoritems = [];
-
                 for (var i = 0; i < data.length; i++) {
 
                     if (invoiceitems.indexOf(data[i]['Invoice Number']) == -1) {
@@ -217,8 +209,6 @@
                         selleritems.push(data[i]['Seller Name']);
                     }
                 }
-
-
                 var table = d3.select('#tableDisplay').append('table')
                 var thead = table.append('thead')
                 var tbody = table.append('tbody');
@@ -254,7 +244,9 @@
                     .style('border', '1px solid #ddd')
                     .style('background-color', '#f2f2f2')
 
-                //Push Data to Filters
+
+
+                //filter push 
 
                 document.getElementById('Vendors').textContent = "";
                 document.getElementById('INVOICES').textContent = "";
@@ -273,9 +265,11 @@
 
                 return table;
             }
-
             // render the table(s)
 
+
+            // console.log(data)
+            // alert(invoice_search);
             if ((invoice_search.length > 1) || (seller_search.length > 1) || (vendor_search.length > 1)) {
                 document.getElementById('tableDisplay').textContent = "";
                 var filteritems = [];
@@ -283,8 +277,9 @@
                 // Invoice , Seller and vendor Search
 
                 if (((seller_search.length) > 1) && ((invoice_search.length) > 1) && ((vendor_search.length) > 1)) {
+                    // alert(seller_search);
                     for (var j = 0; j < data.length; j++) {
-                        if (((data[j]['Seller Name']).includes(seller_search)) && ((data[j]['Invoice Number']).includes(invoice_search)) && ((data[j]['Vendor Name']).includes(vendor_search))) {
+                        if (((data[j]['Seller Name']).includes(seller_search)) && (String(data[j]['Invoice Number']).includes(invoice_search)) && ((data[j]['Vendor Name']).includes(vendor_search))) {
                             filteritems.push(data[j]);
                         }
                     }
@@ -292,8 +287,9 @@
 
                 // Invoice and Seller Search
                 else if (((seller_search.length) > 1) && ((invoice_search.length) > 1)) {
+                    // alert(seller_search);
                     for (var j = 0; j < data.length; j++) {
-                        if (((data[j]['Seller Name']).includes(seller_search)) && ((data[j]['Invoice Number']).includes(invoice_search))) {
+                        if (((data[j]['Seller Name']).includes(seller_search)) && (String(data[j]['Invoice Number']).includes(invoice_search))) {
                             filteritems.push(data[j]);
                         }
                     }
@@ -301,6 +297,7 @@
 
                 // Vendor and Seller Search
                 else if (((seller_search.length) > 1) && ((vendor_search.length) > 1)) {
+                    // alert(seller_search);
                     for (var j = 0; j < data.length; j++) {
                         if (((data[j]['Seller Name']).includes(seller_search)) && ((data[j]['Vendor Name']).includes(vendor_search))) {
                             filteritems.push(data[j]);
@@ -310,8 +307,11 @@
 
                 // Vendor and invoice Search
                 else if (((invoice_search.length) > 1) && ((vendor_search.length) > 1)) {
+                    // alert(invoice_search);
+                    // console.log(data);
                     for (var j = 0; j < data.length; j++) {
-                        if (((data[j]['Invoice Number']).includes(invoice_search)) && ((data[j]['Vendor Name']).includes(vendor_search))) {
+                        // console.log(data[j]);
+                        if ((String(data[j]['Invoice Number']).includes(invoice_search)) && ((data[j]['Vendor Name']).includes(vendor_search))) {
                             filteritems.push(data[j]);
                         }
                     }
@@ -319,15 +319,16 @@
 
                 // Invoice search
                 else if ((invoice_search.length > 1)) {
-                    for (var i = 0; i < data.length; i++) {
-                        if ((data[i]['Invoice Number']).includes(invoice_search)) {
-                            filteritems.push(data[i]);
+                    for (var j = 0; j < (data.length); j++) {
+                        if (String(data[j]['Invoice Number']).includes(invoice_search)) {
+                            filteritems.push(data[j]);
                         }
                     }
                 }
 
                 // Seller Search
                 else if ((seller_search.length) > 1) {
+                    // alert(seller_search);
                     for (var j = 0; j < data.length; j++) {
                         if ((data[j]['Seller Name']).includes(seller_search)) {
                             filteritems.push(data[j]);
@@ -352,6 +353,26 @@
             }
 
         });
+    }
+
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    function filterFunction() {
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("myDropdown");
+        a = div.getElementsByTagName("a");
+        for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                a[i].style.display = "";
+            } else {
+                a[i].style.display = "none";
+            }
+        }
     }
 
 </script>
