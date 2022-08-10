@@ -11,7 +11,7 @@ var cors = require('cors'),
         // Query for this demo you will need values that will be plotted on the bars.
         //the column names should be: name, subtotal
         // new sql.Request().query('select top 500 * from APTB order by [due date] desc').then(function (recordset) {
-            new sql.Request().query('select * from [dbo].[aptb_view]').then(function (recordset) {
+            new sql.Request().query('select * from [dbo].[aptb_view1]').then(function (recordset) {
             // console.log(recordset);
             // exit();
             res.send(recordset);
@@ -31,7 +31,7 @@ router
         // Query for this demo you will need values that will be plotted on the bars.
         //the column names should be: name, subtotal
         // new sql.Request().query('select top 500 * from APTB order by [due date] desc').then(function (recordset) {
-            new sql.Request().query('select * from [dbo].[ap_payment_view]').then(function (recordset) {
+            new sql.Request().query('select * from [dbo].[ap_payment_view1]').then(function (recordset) {
             // console.log(recordset);
             // exit();
             res.send(recordset);

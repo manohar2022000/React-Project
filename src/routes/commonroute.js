@@ -13,14 +13,16 @@ router
             var result = {};
             // Query for this demo you will need values that will be plotted on the bars.
             //the column names should be: name, subtotal
-            new sql.Request().query("select * from (select [Invoice Number],'LF' as portal from [dbo].[lf_view] union select [Invoice Number],'SP' as portal from [dbo].[seller_portal_view] union select [Invoice Number],'APTB' as portal from [dbo].[aptb_view] union select  CAST([INVOICE_ID] AS varchar) as [Invoice Number],'AP Payment' from [dbo].[ap_payment_view]) a where [Invoice Number]='" + queryid + "'").then(function (recordset) {
-
-                for (var i = 0; i < recordset.length; i++) {
+            // new sql.Request().query("select * from (select [Invoice Number],'LF' as portal from [dbo].[lf_view] union select [Invoice Number],'SP' as portal from [dbo].[seller_portal_view] union select [Invoice Number],'APTB' as portal from [dbo].[aptb_view] union select  CAST([INVOICE_ID] AS varchar) as [Invoice Number],'AP Payment' from [dbo].[ap_payment_view]) a where [Invoice Number]='" + queryid + "'").then(function (recordset) {
+                new sql.Request().query("select * from [dbo].[master_search] where [Invoice Number]='" + queryid + "'").then(function (recordset) {
+               
+            //    console.log(recordset);   
+                    for (var i = 0; i < recordset.length; i++) {
                     var portal = recordset[i].portal;
 
                     // Fetch data from AP Payment View
                     if (portal == 'AP Payment') {
-                        new sql.Request().query("select * from [dbo].[ap_payment_view] where [INVOICE_ID]='" + queryid + "'").then(function (appayrecordset) {
+                        new sql.Request().query("select * from [dbo].[ap_payment_view1] where [Invoice Number]='" + queryid + "'").then(function (appayrecordset) {
 
                             if (appayrecordset.length > 0) {
                                 result['Ap Payment'] = appayrecordset;
@@ -31,7 +33,7 @@ router
                     }
                     // Fetch data from APTB View
                     if (portal == "APTB") {
-                        new sql.Request().query("select * from [dbo].[aptb_view] where [Invoice Number]='" + queryid + "'").then(function (appayrecordset) {
+                        new sql.Request().query("select * from [dbo].[aptb_view1] where [Invoice Number]='" + queryid + "'").then(function (appayrecordset) {
                             if (appayrecordset.length > 0) {
                                 result['APTB'] = appayrecordset;
 
@@ -50,7 +52,7 @@ router
                     }
                     // Fetch data from SP View
                     if (portal == "SP") {
-                        new sql.Request().query("select * from [dbo].[seller_portal_view] where [Invoice Number]='" + queryid + "'").then(function (appayrecordset) {
+                        new sql.Request().query("select * from [dbo].[seller_portal_view1] where [Invoice Number]='" + queryid + "'").then(function (appayrecordset) {
                             if (appayrecordset.length > 0) {
                                 result['SP'] = appayrecordset;
                             }
@@ -79,8 +81,8 @@ router
             // Query for this demo you will need values that will be plotted on the bars.
             //the column names should be: name, subtotal
             new sql.Request().query(
-                "select * from (select [Vendor Name],[Invoice Number],'LF' as portal from [dbo].[lf_view] union select 'dummy' as 'Vendor Name', [Invoice Number],'Sp' as portal from [dbo].[seller_portal_view] union select [Supplier Name] as 'Vendor Name' ,[Invoice Number],'APTB' as portal from [dbo].[aptb_view] union select  [SUPPLIER_NAME] as 'Vendor Name', CAST([INVOICE_ID] AS varchar) as [Invoice Number],'AP Payment' from [dbo].[ap_payment_view]) a where [Vendor Name]='" + vendorid + "'"
-
+                // "select * from (select [Vendor Name],[Invoice Number],'LF' as portal from [dbo].[lf_view] union select 'dummy' as 'Vendor Name', [Invoice Number],'Sp' as portal from [dbo].[seller_portal_view] union select [Supplier Name] as 'Vendor Name' ,[Invoice Number],'APTB' as portal from [dbo].[aptb_view] union select  [SUPPLIER_NAME] as 'Vendor Name', CAST([INVOICE_ID] AS varchar) as [Invoice Number],'AP Payment' from [dbo].[ap_payment_view]) a where [Vendor Name]='" + vendorid + "'"
+                "select * from [dbo].[master_search] where [Vendor Name]='" + vendorid + "'"
             ).then(function (recordset) {
                 // queryid = queryid.split('___').join('/')
                 // console.log(recordset);
@@ -103,7 +105,7 @@ router
                     // Fetch data from AP Payment View
                     if (portal == 'AP Payment') {
                         // console.log("appay");
-                        new sql.Request().query("select * from [dbo].[ap_payment_view] where [Supplier_Name]='" + vendorid + "'").then(function (appayrecordset) {
+                        new sql.Request().query("select * from [dbo].[ap_payment_view1] where [Vendor Name]='" + vendorid + "'").then(function (appayrecordset) {
 
                             if (appayrecordset.length > 0) {
                                 result['Ap Payment'] = appayrecordset;
@@ -115,7 +117,7 @@ router
                     // Fetch data from APTB View
                     if (portal == "APTB") {
                         // console.log("ap");
-                        new sql.Request().query("select * from [dbo].[aptb_view] where [Supplier Name]='" + vendorid + "'").then(function (appayrecordset) {
+                        new sql.Request().query("select * from [dbo].[aptb_view1] where [Vendor Name]='" + vendorid + "'").then(function (appayrecordset) {
                             if (appayrecordset.length > 0) {
                                 result['APTB'] = appayrecordset;
 
@@ -133,13 +135,13 @@ router
                         });
                     }
                     // Fetch data from SP View
-                    // if (portal == "SP") {
-                    //     new sql.Request().query("select * from [dbo].[seller_portal_view] where [Invoice Number]='" + queryid + "'").then(function (appayrecordset) {
-                    //         if (appayrecordset.length > 0) {
-                    //             result['SP'] = appayrecordset;
-                    //         }
-                    //     });
-                    // }
+                    if (portal == "SP") {
+                        new sql.Request().query("select * from [dbo].[seller_portal_view1] where [Vendor Name]='" + queryid + "'").then(function (appayrecordset) {
+                            if (appayrecordset.length > 0) {
+                                result['SP'] = appayrecordset;
+                            }
+                        });
+                    }
 
                 }
             }).then(() => {
