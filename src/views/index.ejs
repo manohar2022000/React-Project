@@ -6,8 +6,6 @@
 </head>
 
 <body id="blur">
-
-
   <%- include('partials/navigation') %>
     <div class="container border border-1 bg-opacity-6 border-secondary rounded-pill bg-light  text-center p-3"
       style="margin-top:30px">
@@ -65,11 +63,13 @@
 
   dataload();
   $("#tableDisplay").css("width", (screen.width) - 8);
-  $("#tableDisplay").css("height", (screen.height) - 300);
-  function tabulate(data, columns) {
+  $("#tableDisplay").css("height", (screen.height) - 330);
+  function tabulate(data, columns,tablename) {
 
-    var table = d3.select('#tableDisplay').append('table')
-    var thead = table.append('thead')
+    var table = d3.select('#tableDisplay').append('table');
+table.attr('id',tablename)
+      .style('margin-bottom', '50px');
+    var thead = table.append('thead');
     var tbody = table.append('tbody');
     // append the header row
     thead.append('tr')
@@ -83,12 +83,13 @@
       .style('border', '1px solid #ddd')
       .style('padding', '8px');
 
+
     // create a row for each object in the data
     var rows = tbody.selectAll('tr')
       .data(data)
       .enter()
       .append('tr');
-
+    // alert("rows");
     // create a cell in each row for each column
     var cells = rows.selectAll('td')
       .data(function (row) {
@@ -102,8 +103,8 @@
       .style('padding', '8px')
       .style('border', '1px solid #ddd')
       .style('background-color', '#f2f2f2')
-      .style('padding-bootm', '100px')
-
+      
+    
     hideloader();
   }
 
@@ -119,10 +120,14 @@
     }
 
   }
+
+
   function dataload() {
     showloader()
     var invoices = [];
     var vendors = [];
+    $("#tableDisplay").html('');
+    $("#portals").html('');
     var searchurl = '/universalcheck/search';
     d3.json(searchurl, function (error, data) {
 
@@ -133,9 +138,9 @@
         if ((vendors.indexOf(data[i]['Vendor Name']) == -1)) {
           vendors.push(data[i]['Vendor Name']);
         }
-       
+
       }
-      $("#tableDisplay").html('');
+
       $("input").val('');
 
       invoices.forEach(function (item) {
@@ -153,60 +158,34 @@
 
 
   function filterload(data) {
-    var invoices = [];
-    var vendors = [];
+    var invoicess = [];
+    var vendorss = [];
 
-    for (i = 0; i < data.length; i++) {
-      if (invoices.indexOf(data[i]['Invoice Number']) == -1) {
-        invoices.push(data[i]['Invoice Number']);
+    for (j = 0; j < data.length; j++) {
+      if (invoicess.indexOf(data[j]['Invoice Number']) == -1) {
+        invoicess.push(data[j]['Invoice Number']);
       }
-      try {
-        if ((vendors.indexOf(data[i]['Vendor Name']) == -1)) {
-          if (typeof data[i]['Vendor Name'] != 'undefined') {
-            vendors.push(data[i]['Vendor Name']);
-          }
-        }
+
+      if ((vendorss.indexOf(data[j]['Vendor Name']) == -1)) {
+
+        vendorss.push(data[j]['Vendor Name']);
       }
-      catch (e) {
-        console.log(e);
-      }
-      try {
-        if (vendors.indexOf(data[i]['Supplier Name']) == -1) {
-          if (typeof data[i]['Supplier Name'] != 'undefined') {
-            vendors.push(data[i]['Supplier Name']);
-          }
-        }
-      }
-      catch (e) {
-        console.log(e);
-      }
-      try {
-        if ((vendors.indexOf(data[i]['Supplier_Name']) == -1)) {
-          if (typeof data[i]['Supplier_Name'] != 'undefined') {
-            vendors.push(data[i]['Supplier_Name']);
-          }
-        }
-      }
-      catch (e) {
-        console.log(e);
-      }
-  
+
     }
 
-    invoices.forEach(function (item) {
+    invoicess.forEach(function (item) {
       $("#INVOICES").append(`<option value='` + (item) + `'>`);
     })
- 
-    vendors.forEach(function (item) {
-      $("#Vendors").append(`<option value='` + (item) + `'>`);
-    })
 
-  
+    vendorss.forEach(function (items) {
+      $("#Vendors").append(`<option value='` + (items) + `'>`);
+    })
+    // return 1;
   }
 
   function globalsearch() {
     showloader();
-    
+    $("#tableDisplay").html('');
     let result = [];
     let invoiceid = $("#INVOICE").val();
     if (invoiceid.trim() != '') {
@@ -214,21 +193,28 @@
       id = invoiceid;
       id = id.split('/').join('___');
       var search_url = '/universalcheck/invoice/' + id;
-      $("#tableDisplay").html('');
+
       d3.json(search_url, function (error, data) {
 
+        // console.log(data);
         var count = Object.keys(data).length;
         var keys = Object.keys(data);
         $("#INVOICES").html('');
         $("#Vendors").html('');
-
+        console.log(count);
+        console.log(keys);
+        $("#portals").html('');
         for (i = 0; i < count; i++) {
           data1 = [];
+          // alert("here");
           temp = keys[i];
           data1.push(data[temp]);
-          $("#tableDisplay").append('<h4>' + keys[i] + '</h4>');
+          $("#tableDisplay").append('<h6>' + keys[i] + '</h6>');
+          // <!-- <h1 class="col">hi</h1> -->
+
+$("#portals").append('<div class="col"><a class="btn btn-outline-info mt-1 " style=" text-decoration: none;" href=#'+keys[i].replace(/ /g, "")+'>'+keys[i]+'</a></div>');
+          tabulate((data1[0]), Object.keys(data1[0][0]),keys[i].replace(/ /g, ""));
           filterload(data1[0]);
-          tabulate((data1[0]), Object.keys(data1[0][0]));
         }
       })
     }
@@ -236,7 +222,6 @@
 
   function vendorglobalsearch() {
     showloader();
-    
     let result = [];
     let invoiceid = $("#Vendor").val();
     if (invoiceid.trim() != '') {
@@ -251,21 +236,21 @@
 
         $("#INVOICES").html('');
         $("#Vendors").html('');
+        $("#portals").html('');
         for (i = 0; i < count; i++) {
           data1 = [];
           temp = keys[i];
           data1.push(data[temp]);
+          $("#tableDisplay").append('<h6>' + keys[i] + '</h6>');
 
-          
-          $("#tableDisplay").append('<h4>' + keys[i] + '</h4>');
+          // $("#portals").append('<h4 class="col" href=#'+keys[i]+'>'+keys[i]+'</h4>');
+          $("#portals").append('<div class="col"><a class="btn btn-outline-info mt-1" style=" text-decoration: none;" href=#'+keys[i].replace(/ /g, "")+'>'+keys[i]+'</a></div>');
+          tabulate((data1[0]), Object.keys(data1[0][0]),keys[i].replace(/ /g, ""));
           filterload(data1[0]);
-          tabulate((data1[0]), Object.keys(data1[0][0]));
         }
       })
     }
   }
-
-
 </script>
 
 </html>

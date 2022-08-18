@@ -27,75 +27,7 @@ var cors = require('cors'),
     });
 
 
-router
-    .route("/invoice/:id")
-    .get((req, res) => {
-        var queryid = req.params.id.toString();
-        console.log(queryid);
-        queryid = queryid.split('___').join('/');
-        sql.connect('Server=radiare-azure.database.windows.net,1433;Database=pierian;User Id=radiare-azure;Password=Sql@2018;Encrypt=true').then(function () {
-            var result = {};
-            // Query for this demo you will need values that will be plotted on the bars.
-            //the column names should be: name, subtotal
-            // new sql.Request().query("select * from (select [Invoice Number],'LF' as portal from [dbo].[lf_view] union select [Invoice Number],'SP' as portal from [dbo].[seller_portal_view] union select [Invoice Number],'APTB' as portal from [dbo].[aptb_view] union select  CAST([INVOICE_ID] AS varchar) as [Invoice Number],'AP Payment' from [dbo].[ap_payment_view]) a where [Invoice Number]='" + queryid + "'").then(function (recordset) {
-                new sql.Request().query("select * from [dbo].[master_search] where [Invoice Number]='" + queryid + "'").then(function (recordset) {
-               
-            //    console.log(recordset);   
-                    for (var i = 0; i < recordset.length; i++) {
-                    var portal = recordset[i].portal;
-
-                    // Fetch data from AP Payment View
-                    if (portal == 'AP Payment') {
-                        new sql.Request().query("select * from [dbo].[ap_payment_view1] where [Invoice Number]='" + queryid + "'").then(function (appayrecordset) {
-
-                            if (appayrecordset.length > 0) {
-                                result['Ap Payment'] = appayrecordset;
-
-                            }
-
-                        });
-                    }
-                    // Fetch data from APTB View
-                    if (portal == "APTB") {
-                        new sql.Request().query("select * from [dbo].[aptb_view1] where [Invoice Number]='" + queryid + "'").then(function (appayrecordset) {
-                            if (appayrecordset.length > 0) {
-                                result['APTB'] = appayrecordset;
-
-                            }
-
-                        });
-                    }
-                    // Fetch data from LF View
-                    if (portal == "LF") {
-                        new sql.Request().query("select * from [dbo].[lf_view] where [Invoice Number]='" + queryid + "'").then(function (appayrecordset) {
-                            if (appayrecordset.length > 0) {
-                                result['LF'] = appayrecordset;
-
-                            }
-                        });
-                    }
-                    // Fetch data from SP View
-                    if (portal == "SP") {
-                        new sql.Request().query("select * from [dbo].[seller_portal_view1] where [Invoice Number]='" + queryid + "'").then(function (appayrecordset) {
-                            if (appayrecordset.length > 0) {
-                                result['SP'] = appayrecordset;
-                            }
-                        });
-                    }
-
-                }
-            }).then(() => {
-                setTimeout(() => {
-                    res.send(result);
-                }, 3000);
-
-            })
-        }).catch(function (err) {
-            console.log(err);
-        });
-    })
-
-router
+    router
     .route("/vendor/:vendorid")
     .get((req, res) => {
         var vendorid = req.params.vendorid.toString();
@@ -176,6 +108,75 @@ router
             })
 
         })
+    })
+
+router
+    .route("/invoice/:id")
+    .get((req, res) => {
+        var queryid = req.params.id.toString();
+        
+        queryid = queryid.split('___').join('/');
+        console.log(queryid);
+        sql.connect('Server=radiare-azure.database.windows.net,1433;Database=pierian;User Id=radiare-azure;Password=Sql@2018;Encrypt=true').then(function () {
+            var result = {};
+            // Query for this demo you will need values that will be plotted on the bars.
+            //the column names should be: name, subtotal
+            // new sql.Request().query("select * from (select [Invoice Number],'LF' as portal from [dbo].[lf_view] union select [Invoice Number],'SP' as portal from [dbo].[seller_portal_view] union select [Invoice Number],'APTB' as portal from [dbo].[aptb_view] union select  CAST([INVOICE_ID] AS varchar) as [Invoice Number],'AP Payment' from [dbo].[ap_payment_view]) a where [Invoice Number]='" + queryid + "'").then(function (recordset) {
+                new sql.Request().query("select * from [dbo].[master_search] where [Invoice Number]='" + queryid + "'").then(function (recordset) {
+               
+            //    console.log(recordset);   
+                    for (var i = 0; i < recordset.length; i++) {
+                    var portal = recordset[i].portal;
+
+                    // Fetch data from AP Payment View
+                    if (portal == 'AP Payment') {
+                        new sql.Request().query("select * from [dbo].[ap_payment_view1] where [Invoice Number]='" + queryid + "'").then(function (appayrecordset) {
+
+                            if (appayrecordset.length > 0) {
+                                result['Ap Payment'] = appayrecordset;
+
+                            }
+
+                        });
+                    }
+                    // Fetch data from APTB View
+                    if (portal == "APTB") {
+                        new sql.Request().query("select * from [dbo].[aptb_view1] where [Invoice Number]='" + queryid + "'").then(function (appayrecordset) {
+                            if (appayrecordset.length > 0) {
+                                result['APTB'] = appayrecordset;
+
+                            }
+
+                        });
+                    }
+                    // Fetch data from LF View
+                    if (portal == "LF") {
+                        new sql.Request().query("select * from [dbo].[lf_view] where [Invoice Number]='" + queryid + "'").then(function (appayrecordset) {
+                            if (appayrecordset.length > 0) {
+                                result['LF'] = appayrecordset;
+
+                            }
+                        });
+                    }
+                    // Fetch data from SP View
+                    if (portal == "SP") {
+                        new sql.Request().query("select * from [dbo].[seller_portal_view1] where [Invoice Number]='" + queryid + "'").then(function (appayrecordset) {
+                            if (appayrecordset.length > 0) {
+                                result['SP'] = appayrecordset;
+                            }
+                        });
+                    }
+
+                }
+            }).then(() => {
+                setTimeout(() => {
+                    res.send(result);
+                }, 4000);
+
+            })
+        }).catch(function (err) {
+            console.log(err);
+        });
     })
 
 module.exports = router;
