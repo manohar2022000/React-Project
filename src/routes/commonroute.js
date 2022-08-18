@@ -28,11 +28,11 @@ var cors = require('cors'),
 
 
 router
-    .route("/:id")
+    .route("/invoice/:id")
     .get((req, res) => {
         var queryid = req.params.id.toString();
-        // console.log(queryid);
-        queryid = queryid.split('___').join('/')
+        console.log(queryid);
+        queryid = queryid.split('___').join('/');
         sql.connect('Server=radiare-azure.database.windows.net,1433;Database=pierian;User Id=radiare-azure;Password=Sql@2018;Encrypt=true').then(function () {
             var result = {};
             // Query for this demo you will need values that will be plotted on the bars.
@@ -99,7 +99,7 @@ router
     .route("/vendor/:vendorid")
     .get((req, res) => {
         var vendorid = req.params.vendorid.toString();
-        // console.log(vendorid);
+        console.log(vendorid);
         sql.connect('Server=radiare-azure.database.windows.net,1433;Database=pierian;User Id=radiare-azure;Password=Sql@2018;Encrypt=true').then(function () {
             var result = {};
             // Query for this demo you will need values that will be plotted on the bars.
@@ -160,7 +160,7 @@ router
                     }
                     // Fetch data from SP View
                     if (portal == "SP") {
-                        new sql.Request().query("select * from [dbo].[seller_portal_view1] where [Vendor Name]='" + queryid + "'").then(function (appayrecordset) {
+                        new sql.Request().query("select * from [dbo].[seller_portal_view1] where [Vendor Name]='" + vendorid + "'").then(function (appayrecordset) {
                             if (appayrecordset.length > 0) {
                                 result['SP'] = appayrecordset;
                             }

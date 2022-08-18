@@ -30,7 +30,6 @@
           </datalist>
         </div>
       </div>
-      <!-- <div class="col-md-2"></div> -->
       <div class="col-md-5">
         <div class="d-flex">
           <div class="col-auto">
@@ -65,12 +64,9 @@
   // GET DATA from DB
 
   dataload();
-  // alert((screen.height)-142);
-
   $("#tableDisplay").css("width", (screen.width) - 8);
   $("#tableDisplay").css("height", (screen.height) - 300);
   function tabulate(data, columns) {
-
 
     var table = d3.select('#tableDisplay').append('table')
     var thead = table.append('thead')
@@ -110,36 +106,12 @@
 
     hideloader();
   }
-  // );
-
-
-  // <div class="row">
-  //   <div class="column">
-  //     <div class="card">
-  //       <p>Some text</p>
-  //       <p>Some text</p>
-  //     </div>
-  //   </div>
-
 
   function tabulate2(data, columns) {
-    // console.log(data);
-    // console.log(columns);
-    // data.foreach(value=>{
-    //   console.log(value);
-
-    // })
-    // columns.foreach(value2=>{
-    //   console.log(value2);
-    // })
-    // $("#tableDisplay").append('<div class="row">');
-
     data1 = data[0];
-    // exit();
     for (i = 0; i < data1.length; i++) {
       $("#tableDisplay").append('<div class="column"><div class="card">');
       for (j = 0; j < columns.length; j++) {
-        // console.log(columns[j]+' - >'+data1[columns[j]]);
         $("#tableDisplay").append('<p>' + columns[j] + ' : ' + data1[columns[j]] + '</p>');
       }
       $("#tableDisplay").append('   </div>  </div><br>');
@@ -151,8 +123,6 @@
     showloader()
     var invoices = [];
     var vendors = [];
-    // alert("here");
-
     var searchurl = '/universalcheck/search';
     d3.json(searchurl, function (error, data) {
 
@@ -163,13 +133,7 @@
         if ((vendors.indexOf(data[i]['Vendor Name']) == -1)) {
           vendors.push(data[i]['Vendor Name']);
         }
-        // else if(vendors.indexOf(data[i]['Supplier Name']) == -1){
-        //   vendors.push(data[i]['Supplier Name']);
-        // }
-        // else if((vendors.indexOf(data[i]['Supplier_Name']) == -1)){
-        //   vendors.push(data[i]['Supplier_Name']);
-        // }
-        // invoices.push(data[i]['Invoice Number']);
+       
       }
       $("#tableDisplay").html('');
       $("input").val('');
@@ -191,8 +155,6 @@
   function filterload(data) {
     var invoices = [];
     var vendors = [];
-    // var searchurl = '/lf/search';
-    // d3.json(searchurl, function (error, data) {
 
     for (i = 0; i < data.length; i++) {
       if (invoices.indexOf(data[i]['Invoice Number']) == -1) {
@@ -228,35 +190,31 @@
       catch (e) {
         console.log(e);
       }
-      // invoices.push(data[i]['Invoice Number']);
+  
     }
-
 
     invoices.forEach(function (item) {
       $("#INVOICES").append(`<option value='` + (item) + `'>`);
     })
-    // console.log(vendors); 
+ 
     vendors.forEach(function (item) {
       $("#Vendors").append(`<option value='` + (item) + `'>`);
     })
 
-    // })
+  
   }
 
   function globalsearch() {
     showloader();
-    // alert("here");
     
-
     let result = [];
     let invoiceid = $("#INVOICE").val();
     if (invoiceid.trim() != '') {
       invoiceid = invoiceid.trim();
       id = invoiceid;
       id = id.split('/').join('___');
-      var search_url = '/universalcheck/' + id;
-
-
+      var search_url = '/universalcheck/invoice/' + id;
+      $("#tableDisplay").html('');
       d3.json(search_url, function (error, data) {
 
         var count = Object.keys(data).length;
@@ -268,23 +226,10 @@
           data1 = [];
           temp = keys[i];
           data1.push(data[temp]);
-          // console.log(data1[0][0]);
-          // data1.push(data[keys[i]]);
-          // data2=Object.keys(data1[i]);
-          // tabulate(data1,data2)
-
-          // console.log(data[keys[i]]);
           $("#tableDisplay").append('<h4>' + keys[i] + '</h4>');
-
           filterload(data1[0]);
-          $("#tableDisplay").html('');
           tabulate((data1[0]), Object.keys(data1[0][0]));
         }
-        //           data2.push(data['APTB'][0]);
-        //           var data1 = Object.keys(data['APTB'][0]);
-        // console.log(data2);
-        // console.log(data1);
-        // tabulate(data2,data1);
       })
     }
   }
@@ -292,19 +237,15 @@
   function vendorglobalsearch() {
     showloader();
     
-
     let result = [];
     let invoiceid = $("#Vendor").val();
     if (invoiceid.trim() != '') {
       invoiceid = invoiceid.trim();
       id = invoiceid;
       vendorid = id.split('/').join('___');
-      // console.log("ui->" + vendorid)
       var search_url = '/universalcheck/vendor/' + vendorid;
-
-
+      $("#tableDisplay").html('');
       d3.json(search_url, function (error, data) {
-        // console.log(data);
         var count = Object.keys(data).length;
         var keys = Object.keys(data);
 
@@ -314,23 +255,12 @@
           data1 = [];
           temp = keys[i];
           data1.push(data[temp]);
-          // console.log(data1[0][0]);
-          // data1.push(data[keys[i]]);
-          // data2=Object.keys(data1[i]);
-          // tabulate(data1,data2)
 
-          // console.log(data[keys[i]]);
+          
           $("#tableDisplay").append('<h4>' + keys[i] + '</h4>');
-
           filterload(data1[0]);
-          $("#tableDisplay").html('');
           tabulate((data1[0]), Object.keys(data1[0][0]));
         }
-        //           data2.push(data['APTB'][0]);
-        //           var data1 = Object.keys(data['APTB'][0]);
-        // console.log(data2);
-        // console.log(data1);
-        // tabulate(data2,data1);
       })
     }
   }
