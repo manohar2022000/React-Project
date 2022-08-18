@@ -3,10 +3,9 @@
 var express = require('express');
 var app = express();
 
-var lf=require("./src/routes/lfRoutes");
-var sp=require("./src/routes/spRoutes");
-var ofa=require("./src/routes/ofaRoutes");
+
 var commonroute=require("./src/routes/commonroute");
+var portal=require("./src/routes/portalRoutes");
 
 
 var port = process.env.PORT || 5000;
@@ -16,10 +15,8 @@ var port = process.env.PORT || 5000;
 app.use(express.static('./public'));
 app.use(express.static('./src'));
 
-//New
-app.use("/lf",lf);
-app.use("/sp",sp);
-app.use("/ofa",ofa);
+app.use("/portal",portal);
+
 app.use("/universalcheck",commonroute);
 
 

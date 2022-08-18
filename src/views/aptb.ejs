@@ -2,96 +2,13 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pierian</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
-        integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
-        integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
-        crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
-        integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
-        integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
-        crossorigin="anonymous"></script>
-    <script src="https://d3js.org/d3.v3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
-        integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
-        crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link rel="icon" type="image/x-icon" href="/../assets/Img/logo.ico">
-    <style>
-        th {
-            background: white;
-            position: sticky;
-            top: 0;
-            /* Don't forget this, required for the stickiness */
-            box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
-        }
-
-        td,
-        th {
-            white-space: nowrap;
-            overflow: hidden;
-            text-align: center;
-
-
-        }
-    </style>
+    <%- include('partials/header') %>
 </head>
 
 <body>
-    <nav class="navbar fixed-top" style="background-color: #e3f2fd; height :70px;">
-        <div class="container-fluid">
-            <a class="navbar-brand" style="font-size:25px;" href="/">
-                <img src="../assets/Img/logo.png" alt="" width="40" height="40" class="d-inline-block align-text-top">
-                Pierian
-            </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Portal</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
 
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/lf">LF</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/sp">Seller Portal</a>
-                        </li>
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                OFA
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/aptb">APTB</a></li>
-                                <li><a class="dropdown-item" href="/appayment">AP PAYMENT</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                
-                </div>
-            </div>
-        </div>
+    <%- include('partials/navigation') %>
         <div class="container border border-1 bg-opacity-6 border-secondary rounded-pill bg-light  text-center p-3"
             style="margin-top:30px">
 
@@ -141,49 +58,41 @@
             </div>
             <!-- Apply Button -->
             <div class="col-md-1">
-                <button class="btn btn-outline-success" ONCLICK="dataload()">Apply</button>
+                <button class="btn btn-outline-success loaderbtn" ONCLICK="dataload()">Apply</button>
             </div>
             <!-- Reset Button -->
             <div class="col-md-1">
-                <button class="btn btn-outline-danger" ONCLICK="clearfilter()">Reset</button>
+                <button class="btn btn-outline-danger loaderbtn" ONCLICK="clearfilter()">Reset</button>
             </div>
 
         </div>
 
         <!-- Search Result -->
 
-        <div class="container-fluid pt-4">
-            <div class="col-md-12">
-                <div class="card text-center">
+        <%- include('partials/navigationend') %>
 
-                    <div id="tableDisplay" class="pr-5 pl-2"
-                        style="position:relative ;overflow-x: scroll;overflow-y: scroll">
-                    </div>
-                </div>
-            </div>
-        </div>
 
-    </nav>
 
 </body>
 <script>
-  // Set Result Div Width and Height
-  $("#tableDisplay").css("width", (screen.width) - 8);
+    // Set Result Div Width and Height
+    $("#tableDisplay").css("width", (screen.width) - 8);
     $("#tableDisplay").css("height", (screen.height) - 300);
-    
+
     // GET DATA from DB
 
-    var url = '/ofa/aptb/data';
+    var url = '/portal/aptb/data';
     dataload();
-    function clearfilter(){
-  document.getElementById('INVOICE').value='';
-  document.getElementById('Seller').value='';
-  document.getElementById('Vendor').value='';
-  dataload();
-}
+    function clearfilter() {
+        document.getElementById('INVOICE').value = '';
+        document.getElementById('Seller').value = '';
+        document.getElementById('Vendor').value = '';
+        dataload();
+    }
 
 
     function dataload() {
+        showloader();
 
         var invoice_search = document.getElementById('INVOICE').value;
         var seller_search = document.getElementById('Seller').value;
@@ -219,8 +128,8 @@
                     .data(columns).enter()
                     .append('th')
                     .text(function (column) { return column; })
-                    .style('background-color', '#4096e6')
-                    .style('color', 'white')
+                    .style('background-color', '#96dafa')
+                    .style('color', 'black')
                     .style('text-align', 'center')
                     .style('border', '1px solid #ddd')
                     .style('padding', '8px');
@@ -263,7 +172,7 @@
                 selleritems.forEach(function (item) {
                     $("#Sellers").append(`<option value='` + (item) + `'>`);
                 })
-
+                hideloader();
                 return table;
             }
             // render the table(s)
@@ -350,7 +259,6 @@
 
         });
     }
-
 
 </script>
 

@@ -2,430 +2,333 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pierian</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
-        integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
-        integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
-        crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
-        integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
-        integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
-        crossorigin="anonymous"></script>
-    <script src="https://d3js.org/d3.v3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
-        integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
-        crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link rel="icon" type="image/x-icon" href="/../assets/Img/logo.ico">
-    <style>
-        th {
-            background: white;
-            position: sticky;
-            top: 0;
-            /* Don't forget this, required for the stickiness */
-            box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
-        }
-
-        td,
-        th {
-            white-space: nowrap;
-            overflow: hidden;
-            text-align: center;
-
-
-        }
-        #loader {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 1;
-  width: 120px;
-  height: 120px;
-  margin: -76px 0 0 -76px;
-  border: 16px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 16px solid #3498db;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
-}
-
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Add animation to "page content" */
-.animate-bottom {
-  position: relative;
-  -webkit-animation-name: animatebottom;
-  -webkit-animation-duration: 1s;
-  animation-name: animatebottom;
-  animation-duration: 1s
-}
-
-@-webkit-keyframes animatebottom {
-  from { bottom:-100px; opacity:0 } 
-  to { bottom:0px; opacity:1 }
-}
-
-@keyframes animatebottom { 
-  from{ bottom:-100px; opacity:0 } 
-  to{ bottom:0; opacity:1 }
-}
-
-#myDiv {
-  display: none;
-  text-align: center;
-}
-    </style>
+ <%- include('partials/header') %>
 </head>
-
-
-
-
-
-
-<script>
-var myVar;
-
-function myFunction() {
-  myVar = setTimeout(showPage, 3000);
-}
-
-function showPage() {
-  document.getElementById("loader").style.display = "none";
-  document.getElementById("myDiv").style.display = "block";
-}
-</script>
-
-
 <body>
-    <nav class="navbar fixed-top" onload="myFunction()" style="background-color: #e3f2fd; height :70px;">
-        <div class="container-fluid">
-            <a class="navbar-brand" style="font-size:25px;" href="/">
-                <img src="../assets/Img/logo.png" alt="" width="40" height="40" class="d-inline-block align-text-top">
-                Pierian
-            </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Portal</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/lf">LF</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/sp">Seller Portal</a>
-                        </li>
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                OFA
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/aptb">APTB</a></li>
-                                <li><a class="dropdown-item" href="/appayment">AP PAYMENT</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-
-                </div>
-            </div>
-        </div>
-        <div class="container border border-1 bg-opacity-6 border-secondary rounded-pill bg-light  text-center p-3"
-            style="margin-top:30px">
-
-            <!-- Seller Search -->
-
-            <div class="col-md-3">
-                <div class="d-flex">
-                    <div class="col-auto">
-                        <label for="Seller" class="col-form-label">Seller Search</label>
-                    </div>
-                    <div class="col-md-7 ms-2">
-                        <input class="form-control me-1" placeholder="" aria-label="Search" list="Sellers" name="Seller"
-                            id="Seller">
-                    </div>
-                    <datalist id="Sellers">
-                    </datalist>
-                </div>
-            </div>
-            <!-- Vendor Search -->
-
-            <div class="col-md-3">
-                <div class="d-flex">
+   
+<%- include('partials/navigation') %>
+        <div class="container border border-1 bg-opacity-6 border-secondary rounded-pill bg-light  text-center p-3" style="margin-top:30px">
+           
+            <div class="col-md-5">
+                <div class="d-flex" >
                     <div class="col-auto">
                         <label for="Vendor" class="col-form-label">Vendor Search</label>
                     </div>
-                    <div class="col-md-7 ms-2">
-                        <input class="form-control me-1" placeholder="" aria-label="Search" list="Vendors" name="Vendor"
-                            id="Vendor">
+                    <div class="col-md-8 ms-2">
+                        <input class="form-control me-1"  placeholder="" aria-label="Search" list="Vendors"
+                            name="Vendor" id="Vendor">
                     </div>
+                    <div class="ms-1">
+                        <button class="btn btn-outline-success" id="vendorsearchButton" onclick="vendorglobalsearch()"
+                            >Search</button></div>
+
                     <datalist id="Vendors">
                     </datalist>
                 </div>
             </div>
-            <!-- Invoice Search -->
-            <div class="col-md-3">
-                <div class="d-flex">
+            <!-- <div class="col-md-2"></div> -->
+            <div class="col-md-5">
+                <div class="d-flex" >
                     <div class="col-auto">
-                        <label for="INVOICE" class="col-form-label">Invoice Search</label>
+                        <label for="Vendor" class="col-form-label">Invoice Search</label>
                     </div>
-                    <div class="col-md-7 ms-2">
-                        <input class="form-control me-1" placeholder="" aria-label="Search" list="INVOICES"
-                            name="INVOICE" id="INVOICE">
+                    <div class="col-md-8 ms-2">
+                        <input class="form-control me-1"  placeholder="" aria-label="Search" list="INVOICES" name="INVOICE" id="INVOICE">
                     </div>
-                    <datalist id="INVOICES">
-                    </datalist>
-                </div>
+                    <div class="ms-1">
+                        <button class="btn btn-outline-success" id="searchButton" onclick="globalsearch()"
+                           >Search</button></div>
+                            <datalist id="INVOICES">
+                            </datalist>
+                        </div>
             </div>
-            <!-- Apply Button -->
             <div class="col-md-1">
-                <button class="btn btn-outline-success" ONCLICK="dataload()">Apply</button>
-            </div>
-            <!-- Reset Button -->
-            <div class="col-md-1">
-                <button class="btn btn-outline-danger" ONCLICK="clearfilter()">Reset</button>
+                <button class="btn btn-outline-danger" ONCLICK="dataload()">Reset</button>
             </div>
 
         </div>
 
-        <!-- Search Result -->
 
-        <div class="container-fluid pt-4">
-            <div class="col-md-12">
-                <div class="card text-center">
-                    <div id="loader"></div>
+        <%- include('partials/navigationend') %>
 
-                    <div id="tableDisplay" class="pr-5 pl-2"
-                        style="position:relative ;overflow-x: scroll;overflow-y: scroll">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </nav>
 
 </body>
 <script>
-    // Set Result Div Width and Height
-    $("#tableDisplay").css("width", (screen.width) - 8);
-    $("#tableDisplay").css("height", (screen.height) - 300);
+
+
     // GET DATA from DB
 
-    var url = '/ofa/aptb-pay/data';
     dataload();
-    function clearfilter() {
-        document.getElementById('INVOICE').value = '';
-        document.getElementById('Seller').value = '';
-        document.getElementById('Vendor').value = '';
-        dataload();
+    // alert((screen.height)-142);
+
+    $("#tableDisplay").css("width",(screen.width)-8);
+    $("#tableDisplay").css("height",(screen.height)-300);
+    function tabulate(data, columns) {
+
+
+      var table = d3.select('#tableDisplay').append('table')
+      var thead = table.append('thead')
+      var tbody = table.append('tbody');
+      // append the header row
+      thead.append('tr')
+        .selectAll('th')
+        .data(columns).enter()
+        .append('th')
+        .text(function (column) { return column; })
+        .style('background-color', '#4096e6')
+        .style('color', 'white')
+        .style('text-align', 'center')
+        .style('border', '1px solid #ddd')
+        .style('padding', '8px');
+
+      // create a row for each object in the data
+      var rows = tbody.selectAll('tr')
+        .data(data)
+        .enter()
+        .append('tr');
+
+      // create a cell in each row for each column
+      var cells = rows.selectAll('td')
+        .data(function (row) {
+          return columns.map(function (column) {
+            return { column: column, value: row[column] };
+          });
+        })
+        .enter()
+        .append('td')
+        .text(function (d) { return d.value; })
+        .style('padding', '8px')
+        .style('border', '1px solid #ddd')
+        .style('background-color', '#f2f2f2')
+        .style('padding-bootm', '100px')
+
+        hideloader();
     }
+    // );
 
 
+    // <div class="row">
+    //   <div class="column">
+    //     <div class="card">
+    //       <p>Some text</p>
+    //       <p>Some text</p>
+    //     </div>
+    //   </div>
+
+
+    function tabulate2(data, columns) {
+      // console.log(data);
+      // console.log(columns);
+      // data.foreach(value=>{
+      //   console.log(value);
+
+      // })
+      // columns.foreach(value2=>{
+      //   console.log(value2);
+      // })
+      // $("#tableDisplay").append('<div class="row">');
+
+      data1 = data[0];
+      // exit();
+      for (i = 0; i < data1.length; i++) {
+        $("#tableDisplay").append('<div class="column"><div class="card">');
+        for (j = 0; j < columns.length; j++) {
+          // console.log(columns[j]+' - >'+data1[columns[j]]);
+          $("#tableDisplay").append('<p>' + columns[j] + ' : ' + data1[columns[j]] + '</p>');
+        }
+        $("#tableDisplay").append('   </div>  </div><br>');
+
+      }
+
+    }
     function dataload() {
-        myFunction();
+        showloader()
+      var invoices = [];
+      var vendors = [];
+      // alert("here");
+    
+      var searchurl = '/universalcheck/search';
+      d3.json(searchurl, function (error, data) {
 
-        var invoice_search = document.getElementById('INVOICE').value;
-        var seller_search = document.getElementById('Seller').value;
-        var vendor_search = document.getElementById('Vendor').value;
+        for (i = 0; i < data.length; i++) {
+          if (invoices.indexOf(data[i]['Invoice Number']) == -1) {
+            invoices.push(data[i]['Invoice Number']);
+          }
+          if ((vendors.indexOf(data[i]['Vendor Name']) == -1)) {
+          vendors.push(data[i]['Vendor Name']);
+        }
+        // else if(vendors.indexOf(data[i]['Supplier Name']) == -1){
+        //   vendors.push(data[i]['Supplier Name']);
+        // }
+        // else if((vendors.indexOf(data[i]['Supplier_Name']) == -1)){
+        //   vendors.push(data[i]['Supplier_Name']);
+        // }
+          // invoices.push(data[i]['Invoice Number']);
+        }
+        $("#tableDisplay").html('');
+        $("input").val('');
 
+        invoices.forEach(function (item) {
+          $("#INVOICES").append(`<option value='` + (item) + `'>`);
+        })
 
-        d3.json(url, function (error, data) {
+        vendors.forEach(function (item) {
+          $("#Vendors").append(`<option value='` + (item) + `'>`);
+        })
+        hideloader();
 
-            function tabulate(data, columns) {
-                var invoiceitems = [];
-                var selleritems = [];
-                var vendoritems = [];
-                for (var i = 0; i < data.length; i++) {
-
-                    if (invoiceitems.indexOf(data[i]['Invoice Number']) == -1) {
-                        invoiceitems.push(data[i]['Invoice Number']);
-                    }
-
-                    if (vendoritems.indexOf(data[i]['Vendor Name']) == -1) {
-                        vendoritems.push(data[i]['Vendor Name']);
-                    }
-
-                    if (selleritems.indexOf(data[i]['Seller Name']) == -1) {
-                        selleritems.push(data[i]['Seller Name']);
-                    }
-                }
-                var table = d3.select('#tableDisplay').append('table')
-                var thead = table.append('thead')
-                var tbody = table.append('tbody');
-                // append the header row
-                thead.append('tr')
-                    .selectAll('th')
-                    .data(columns).enter()
-                    .append('th')
-                    .text(function (column) { return column; })
-                    .style('background-color', '#4096e6')
-                    .style('color', 'white')
-                    .style('text-align', 'center')
-                    .style('border', '1px solid #ddd')
-                    .style('padding', '8px');
-
-                // create a row for each object in the data
-                var rows = tbody.selectAll('tr')
-                    .data(data)
-                    .enter()
-                    .append('tr');
-
-                // create a cell in each row for each column
-                var cells = rows.selectAll('td')
-                    .data(function (row) {
-                        return columns.map(function (column) {
-                            return { column: column, value: row[column] };
-                        });
-                    })
-                    .enter()
-                    .append('td')
-                    .text(function (d) { return d.value; })
-                    .style('padding', '8px')
-                    .style('border', '1px solid #ddd')
-                    .style('background-color', '#f2f2f2')
-
-
-
-                //filter push 
-
-                document.getElementById('Vendors').textContent = "";
-                document.getElementById('INVOICES').textContent = "";
-                document.getElementById('Sellers').textContent = "";
-                vendoritems.forEach(function (item) {
-                    $("#Vendors").append(`<option value='` + (item) + `'>`);
-                })
-
-                invoiceitems.forEach(function (item) {
-                    $("#INVOICES").append(`<option value='` + (item) + `'>`);
-
-                })
-                selleritems.forEach(function (item) {
-                    $("#Sellers").append(`<option value='` + (item) + `'>`);
-                })
-showPage();
-                return table;
-            }
-            // render the table(s)
-
-
-            // console.log(data)
-            // alert(invoice_search);
-            if ((invoice_search.length > 1) || (seller_search.length > 1) || (vendor_search.length > 1)) {
-                document.getElementById('tableDisplay').textContent = "";
-                var filteritems = [];
-
-                // Invoice , Seller and vendor Search
-
-                if (((seller_search.length) > 1) && ((invoice_search.length) > 1) && ((vendor_search.length) > 1)) {
-                    // alert(seller_search);
-                    for (var j = 0; j < data.length; j++) {
-                        if (((data[j]['Seller Name']).includes(seller_search)) && (String(data[j]['Invoice Number']).includes(invoice_search)) && ((data[j]['Vendor Name']).includes(vendor_search))) {
-                            filteritems.push(data[j]);
-                        }
-                    }
-                }
-
-                // Invoice and Seller Search
-                else if (((seller_search.length) > 1) && ((invoice_search.length) > 1)) {
-                    // alert(seller_search);
-                    for (var j = 0; j < data.length; j++) {
-                        if (((data[j]['Seller Name']).includes(seller_search)) && (String(data[j]['Invoice Number']).includes(invoice_search))) {
-                            filteritems.push(data[j]);
-                        }
-                    }
-                }
-
-                // Vendor and Seller Search
-                else if (((seller_search.length) > 1) && ((vendor_search.length) > 1)) {
-                    // alert(seller_search);
-                    for (var j = 0; j < data.length; j++) {
-                        if (((data[j]['Seller Name']).includes(seller_search)) && ((data[j]['Vendor Name']).includes(vendor_search))) {
-                            filteritems.push(data[j]);
-                        }
-                    }
-                }
-
-                // Vendor and invoice Search
-                else if (((invoice_search.length) > 1) && ((vendor_search.length) > 1)) {
-                    // alert(invoice_search);
-                    // console.log(data);
-                    for (var j = 0; j < data.length; j++) {
-                        // console.log(data[j]);
-                        if ((String(data[j]['Invoice Number']).includes(invoice_search)) && ((data[j]['Vendor Name']).includes(vendor_search))) {
-                            filteritems.push(data[j]);
-                        }
-                    }
-                }
-
-                // Invoice search
-                else if ((invoice_search.length > 1)) {
-                    for (var j = 0; j < (data.length); j++) {
-                        if (String(data[j]['Invoice Number']).includes(invoice_search)) {
-                            filteritems.push(data[j]);
-                        }
-                    }
-                }
-
-                // Seller Search
-                else if ((seller_search.length) > 1) {
-                    // alert(seller_search);
-                    for (var j = 0; j < data.length; j++) {
-                        if ((data[j]['Seller Name']).includes(seller_search)) {
-                            filteritems.push(data[j]);
-                        }
-                    }
-                }
-
-                // Vendor Search
-                else if ((vendor_search.length) > 1) {
-                    for (var j = 0; j < data.length; j++) {
-                        if ((data[j]['Vendor Name']).includes(vendor_search)) {
-                            filteritems.push(data[j]);
-                        }
-                    }
-                }
-
-                tabulate(filteritems, Object.keys(data[0]));
-            }
-            else {
-                document.getElementById('tableDisplay').textContent = "";
-                tabulate(data, Object.keys(data[0])); // 2 column table
-            }
-
-        });
+      })
     }
 
 
 
-</script>
+    function filterload(data) {
+      var invoices = [];
+      var vendors = [];
+      // var searchurl = '/lf/search';
+      // d3.json(searchurl, function (error, data) {
 
+      for (i = 0; i < data.length; i++) {
+        if (invoices.indexOf(data[i]['Invoice Number']) == -1) {
+          invoices.push(data[i]['Invoice Number']);
+        }
+        try{
+        if ((vendors.indexOf(data[i]['Vendor Name']) == -1)) {
+          if(typeof data[i]['Vendor Name']!='undefined'){
+          vendors.push(data[i]['Vendor Name']);
+          }
+        }
+      }
+      catch(e){
+        console.log(e);
+      }
+      try{
+        if(vendors.indexOf(data[i]['Supplier Name']) == -1){
+          if(typeof data[i]['Supplier Name']!='undefined'){
+          vendors.push(data[i]['Supplier Name']);
+          }
+        }
+      }
+      catch(e){
+        console.log(e);
+      }
+      try{
+        if((vendors.indexOf(data[i]['Supplier_Name']) == -1)){
+          if(typeof data[i]['Supplier_Name']!='undefined'){
+          vendors.push(data[i]['Supplier_Name']);
+          }
+        }
+      }
+      catch(e){
+        console.log(e);
+      }
+        // invoices.push(data[i]['Invoice Number']);
+      }
+
+
+      invoices.forEach(function (item) {
+        $("#INVOICES").append(`<option value='` + (item) + `'>`);
+      })
+      // console.log(vendors); 
+      vendors.forEach(function (item) {
+        $("#Vendors").append(`<option value='` + (item) + `'>`);
+      })
+
+      // })
+    }
+
+    function globalsearch() {
+        showloader();
+// alert("here");
+      $("#tableDisplay").html('');
+
+      let result = [];
+      let invoiceid = $("#INVOICE").val();
+      if (invoiceid.trim() != '') {
+        invoiceid = invoiceid.trim();
+        id = invoiceid;
+        id = id.split('/').join('___');
+        var search_url = '/universalcheck/' + id;
+
+
+        d3.json(search_url, function (error, data) {
+
+          var count = Object.keys(data).length;
+          var keys = Object.keys(data);
+          $("#INVOICES").html('');
+          $("#Vendors").html('');
+
+          for (i = 0; i < count; i++) {
+            data1 = [];
+            temp = keys[i];
+            data1.push(data[temp]);
+            // console.log(data1[0][0]);
+            // data1.push(data[keys[i]]);
+            // data2=Object.keys(data1[i]);
+            // tabulate(data1,data2)
+
+            // console.log(data[keys[i]]);
+            $("#tableDisplay").append('<h4>' + keys[i] + '</h4>');
+
+            filterload(data1[0]);
+            tabulate((data1[0]), Object.keys(data1[0][0]));
+          }
+          //           data2.push(data['APTB'][0]);
+          //           var data1 = Object.keys(data['APTB'][0]);
+          // console.log(data2);
+          // console.log(data1);
+          // tabulate(data2,data1);
+        })
+      }
+    }
+
+    function vendorglobalsearch() {
+showloader();
+      $("#tableDisplay").html('');
+
+      let result = [];
+      let invoiceid = $("#Vendor").val();
+      if (invoiceid.trim() != '') {
+        invoiceid = invoiceid.trim();
+        id = invoiceid;
+        vendorid = id.split('/').join('___');
+        // console.log("ui->" + vendorid)
+        var search_url = '/universalcheck/vendor/' + vendorid;
+
+
+        d3.json(search_url, function (error, data) {
+          // console.log(data);
+          var count = Object.keys(data).length;
+          var keys = Object.keys(data);
+
+          $("#INVOICES").html('');
+          $("#Vendors").html('');
+          for (i = 0; i < count; i++) {
+            data1 = [];
+            temp = keys[i];
+            data1.push(data[temp]);
+            // console.log(data1[0][0]);
+            // data1.push(data[keys[i]]);
+            // data2=Object.keys(data1[i]);
+            // tabulate(data1,data2)
+
+            // console.log(data[keys[i]]);
+            $("#tableDisplay").append('<h4>' + keys[i] + '</h4>');
+
+            filterload(data1[0]);
+            tabulate((data1[0]), Object.keys(data1[0][0]));
+          }
+          //           data2.push(data['APTB'][0]);
+          //           var data1 = Object.keys(data['APTB'][0]);
+          // console.log(data2);
+          // console.log(data1);
+          // tabulate(data2,data1);
+        })
+      }
+    }
+
+
+  </script>
 </html>
+
