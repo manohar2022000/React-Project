@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <%- include('partials/layout') %>
+</head>
+<body>
+    <body id="blur">
+      <%- include('partials/navigation') %>
+        <div class="container border border-1 bg-opacity-6 border-secondary rounded-pill bg-light  text-center p-3"
+          style="margin-top:30px">
+    
+          <div class="col-md-5">
+            <div class="d-flex">
+              <div class="col-auto">
+                <label for="Vendor" class="col-form-label">Vendor Search</label>
+              </div>
+              <div class="col-md-8 ms-2">
+                <input class="form-control me-1" placeholder="" aria-label="Search" list="Vendors" name="Vendor"
+                  id="Vendor">
+              </div>
+              <div class="ms-1">
+                <button class="btn btn-outline-success loadbtn" id="vendorsearchButton"
+                  onclick="vendorglobalsearch()">Search</button>
+              </div>
+    
+              <datalist id="Vendors">
+              </datalist>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="d-flex">
+              <div class="col-auto">
+                <label for="Vendor" class="col-form-label">Invoice Search</label>
+              </div>
+              <div class="col-md-8 ms-2">
+                <input class="form-control me-1" placeholder="" aria-label="Search" list="INVOICES" name="INVOICE"
+                  id="INVOICE">
+              </div>
+              <div class="ms-1">
+                <button class="btn btn-outline-success loadbtn" id="searchButton" onclick="globalsearch()">Search</button>
+              </div>
+              <datalist id="INVOICES">
+              </datalist>
+            </div>
+          </div>
+          <div class="col-md-1">
+            <button class="btn btn-outline-danger loadbtn" ONCLICK="dataload()">Reset</button>
+          </div>
+    
+        </div>
+    
+    
+        <%- include('partials/navigationend') %>
+    
+    
+    </body>
+    
+    <script>
+    
+    
+      // GET DATA from DB
+      $("#tableDisplay").css("width", (screen.width) - 8);
+      $("#tableDisplay").css("height", (screen.height) - 330);
+      dataload();
+      
+      function tabulate(data, columns,tablename) {
+    
+        var table = d3.select('#tableDisplay').append('table');
+    table.attr('id',tablename)
+          .style('margin-bottom', '50px');
+        var thead = table.append('thead');
+        var tbody = table.append('tbody');
+        // append the header row
+        thead.append('tr')
+          .selectAll('th')
+          .data(columns).enter()
+          .append('th')
+          .text(function (column) { return column; })
+          .style('background-color', '#96dafa')
+          .style('color', 'black')
+          .style('text-align', 'center')
+          .style('border', '1px solid #ddd')
+          .style('padding', '8px');
+    
+    
+        // create a row for each object in the data
+        var rows = tbody.selectAll('tr')
+          .data(data)
+          .enter()
+          .append('tr');
+        // alert("rows");
+        // create a cell in each row for each column
+        var cells = rows.selectAll('td')
+          .data(function (row) {
+            return columns.map(function (column) {
+              return { column: column, value: row[column] };
+            });
+          })
+          .enter()
+          .append('td')
+          .text(function (d) { return d.value; })
+          .style('padding', '8px')
+          .style('border', '1px solid #ddd')
+          .style('background-color', '#f2f2f2')
+          
+        
+        hideloader();
+      }
+    
+      function tabulate2(data, columns) {
+        data1 = data[0];
+        for (i = 0; i < data1.length; i++) {
+          $("#tableDisplay").append('<div class="column"><div class="card">');
+          for (j = 0; j < columns.length; j++) {
+            $("#tableDisplay").append('<p>' + columns[j] + ' : ' + data1[columns[j]] + '</p>');
+          }
+          $("#tableDisplay").append('   </div>  </div><br>');
+    
+        }
+    
+      }
+    
+    
+      function dataload() {
+        showloader()
+        var invoices = [];
+        var vendors = [];
+        $("#tableDisplay").html('');
+        $("#portals").html('');
+        var searchurl = '/universalcheck/search';
+        d3.json(searchurl, function (error, data) {
+    
+          for (i = 0; i < data.length; i++) {
+            if (invoices.indexOf(data[i]['Invoice Number']) == -1) {
+              invoices.push(data[i]['Invoice Number']);
+            }
+            if ((vendors.indexOf(data[i]['Vendor Name']) == -1)) {
+              vendors.push(data[i]['Vendor Name']);
+            }
+    
+          }
+    
+          $("input").val('');
+    
+          invoices.forEach(function (item) {
+            $("#INVOICES").append(`<option value='` + (item) + `'>`);
+          })
+    
+          vendors.forEach(function (item) {
+            $("#Vendors").append(`<option value='` + (item) + `'>`);
+          })
+          hideloader();
+    
+        })
+      }
+    
+    
+    
+      function filterload(data) {
+        var invoicess = [];
+        var vendorss = [];
+    
+        for (j = 0; j < data.length; j++) {
+          if (invoicess.indexOf(data[j]['Invoice Number']) == -1) {
+            invoicess.push(data[j]['Invoice Number']);
+          }
+    
+          if ((vendorss.indexOf(data[j]['Vendor Name']) == -1)) {
+    
+            vendorss.push(data[j]['Vendor Name']);
+          }
+    
+        }
+    
+        invoicess.forEach(function (item) {
+          $("#INVOICES").append(`<option value='` + (item) + `'>`);
+        })
+    
+        vendorss.forEach(function (items) {
+          $("#Vendors").append(`<option value='` + (items) + `'>`);
+        })
+        // return 1;
+      }
+    
+      function globalsearch() {
+        showloader();
+        $("#tableDisplay").html('');
+        let result = [];
+        let invoiceid = $("#INVOICE").val();
+        if (invoiceid.trim() != '') {
+          invoiceid = invoiceid.trim();
+          id = invoiceid;
+          id = id.split('/').join('___');
+          var search_url = '/universalcheck/invoice/' + id;
+    
+          d3.json(search_url, function (error, data) {
+    
+            // console.log(data);
+            var count = Object.keys(data).length;
+            var keys = Object.keys(data);
+            $("#INVOICES").html('');
+            $("#Vendors").html('');
+            console.log(count);
+            console.log(keys);
+            $("#portals").html('');
+            for (i = 0; i < count; i++) {
+              data1 = [];
+              // alert("here");
+              temp = keys[i];
+              data1.push(data[temp]);
+              $("#tableDisplay").append('<h6>' + keys[i] + '</h6>');
+              // <!-- <h1 class="col">hi</h1> -->
+    
+    $("#portals").append('<div class="col"><a class="btn btn-outline-info mt-1 " style=" text-decoration: none;" href=#'+keys[i].replace(/ /g, "")+'>'+keys[i] .concat(' - ',(data1[0]).length)+'</a></div>');
+              tabulate((data1[0]), Object.keys(data1[0][0]),keys[i].replace(/ /g, ""));
+              filterload(data1[0]);
+            }
+          })
+        }
+      }
+    
+      function vendorglobalsearch() {
+        showloader();
+        let result = [];
+        let invoiceid = $("#Vendor").val();
+        if (invoiceid.trim() != '') {
+          invoiceid = invoiceid.trim();
+          id = invoiceid;
+          vendorid = id.split('/').join('___');
+          var search_url = '/universalcheck/vendor/' + vendorid;
+          $("#tableDisplay").html('');
+          d3.json(search_url, function (error, data) {
+            var count = Object.keys(data).length;
+            var keys = Object.keys(data);
+    
+            $("#INVOICES").html('');
+            $("#Vendors").html('');
+            $("#portals").html('');
+            for (i = 0; i < count; i++) {
+              data1 = [];
+              temp = keys[i];
+              data1.push(data[temp]);
+              $("#tableDisplay").append('<h6>' + keys[i] + '</h6>');
+    
+              // $("#portals").append('<h4 class="col" href=#'+keys[i]+'>'+keys[i]+'</h4>');
+              $("#portals").append('<div class="col"><a class="btn btn-outline-info mt-1" style=" text-decoration: none;" href=#'+keys[i].replace(/ /g, "")+'>'+keys[i].concat(' - ',(data1[0]).length)+'</a></div>');
+              console.log("length"+(data1[0]).length+"<br>");
+              tabulate((data1[0]), Object.keys(data1[0][0]),keys[i].replace(/ /g, ""));
+              filterload(data1[0]);
+            }
+          })
+        }
+      }
+    </script>
+    
+    </html>
