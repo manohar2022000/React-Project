@@ -28,10 +28,17 @@ const appaymentView = (req, res) => {
     });
 }
 
+const newView = (req, res) => {
+
+    res.render("new", {
+    });
+}
+
 module.exports = {
     indexView,
     lfView,
     spView,
     aptbView,
-    appaymentView
+    appaymentView,
+    newView
 };

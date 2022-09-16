@@ -10,12 +10,32 @@
         <div class="container border border-1 bg-opacity-6 border-secondary rounded-pill bg-light  text-center p-3"
           style="margin-top:30px">
     
-          <div class="col-md-5">
+
+<!-- 
+          <div class="col-md-3">
+            <div class="d-flex">
+                <div class="col-auto">
+                    <label for="Seller" class="col-form-label">Seller Search</label>
+                </div>
+                <div class="col-md-6 ms-2">
+                    <input class="form-control me-1" placeholder="" aria-label="Search" list="Sellers" name="Seller"
+                        id="Seller">
+                </div>
+                <div class="ms-1">
+                  <button class="btn btn-outline-success loadbtn" id="vendorsearchButton"
+                    onclick="globalsearch()">Search</button>
+                </div>
+                <datalist id="Sellers">
+                </datalist>
+            </div>
+        </div> -->
+
+          <div class="col-md-3">
             <div class="d-flex">
               <div class="col-auto">
                 <label for="Vendor" class="col-form-label">Vendor Search</label>
               </div>
-              <div class="col-md-8 ms-2">
+              <div class="col-md-6 ms-2">
                 <input class="form-control me-1" placeholder="" aria-label="Search" list="Vendors" name="Vendor"
                   id="Vendor">
               </div>
@@ -28,12 +48,12 @@
               </datalist>
             </div>
           </div>
-          <div class="col-md-5">
+          <div class="col-md-3">
             <div class="d-flex">
               <div class="col-auto">
                 <label for="Vendor" class="col-form-label">Invoice Search</label>
               </div>
-              <div class="col-md-8 ms-2">
+              <div class="col-md-6 ms-2">
                 <input class="form-control me-1" placeholder="" aria-label="Search" list="INVOICES" name="INVOICE"
                   id="INVOICE">
               </div>
@@ -48,7 +68,20 @@
             <button class="btn btn-outline-danger loadbtn" ONCLICK="dataload()">Reset</button>
           </div>
     
+
+
+          <!-- ---------------------- -->
+          <!-- <div class="col-12 my-1 align-self-center">
+            <label class="mr-sm-4" for="inlineFormCustomSelect">Seller</label>
+            <select class="custom-select mr-sm-4" id="seller">
+              <option selected>Choose...</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div> -->
         </div>
+      
     
     
         <%- include('partials/navigationend') %>
@@ -126,6 +159,7 @@
         showloader()
         var invoices = [];
         var vendors = [];
+        // var sellers =[];
         $("#tableDisplay").html('');
         $("#portals").html('');
         var searchurl = '/universalcheck/search';
@@ -138,7 +172,9 @@
             if ((vendors.indexOf(data[i]['Vendor Name']) == -1)) {
               vendors.push(data[i]['Vendor Name']);
             }
-    
+            // if ((sellers.indexOf(data[i]['Seller Name']) == -1)) {
+            //   sellers.push(data[i]['Seller Name']);
+            // }
           }
     
           $("input").val('');
@@ -150,6 +186,11 @@
           vendors.forEach(function (item) {
             $("#Vendors").append(`<option value='` + (item) + `'>`);
           })
+
+          // sellers.forEach(function(item){
+          //   $("#sellers").append('<option value="'+(item)+'">'+(item)+'</option>');
+          // })
+          
           hideloader();
     
         })

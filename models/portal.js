@@ -14,7 +14,7 @@ router
         sql.connect(config).then(function () {
             // Query for this demo you will need values that will be plotted on the bars.
             //the column names should be: name, subtotal
-            new sql.Request().query('select * from  [dbo].[lf_view]').then(function (recordset) {
+            new sql.Request().query('select * from  [dbo].[view_lf]').then(function (recordset) {
                 res.send(recordset);
             }).catch(function (err) {
                 console.log(err);
@@ -31,7 +31,7 @@ router
         sql.connect(config).then(function () {
             // Query for this demo you will need values that will be plotted on the bars.
             //the column names should be: name, subtotal
-            new sql.Request().query('select * from [dbo].[seller_portal_view1]').then(function (recordset) {
+            new sql.Request().query('select * from [dbo].[view_seller_portal]').then(function (recordset) {
                 res.send(recordset);
             }).catch(function (err) {
                 console.log(err);
@@ -51,7 +51,7 @@ router
         sql.connect(config).then(function () {
             // Query for this demo you will need values that will be plotted on the bars.
             //the column names should be: name, subtotal
-            new sql.Request().query('select * from [dbo].[aptb_view1]').then(function (recordset) {
+            new sql.Request().query('select * from [dbo].[view_aptb]').then(function (recordset) {
                 res.send(recordset);
             }).catch(function (err) {
                 console.log(err);
@@ -69,7 +69,7 @@ router
         sql.connect(config).then(function () {
             // Query for this demo you will need values that will be plotted on the bars.
             //the column names should be: name, subtotal
-            new sql.Request().query('select * from [dbo].[ap_payment_view1]').then(function (recordset) {
+            new sql.Request().query('select * from [dbo].[view_ap_payment]').then(function (recordset) {
                 res.send(recordset);
             }).catch(function (err) {
                 console.log(err);

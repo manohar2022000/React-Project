@@ -11,9 +11,7 @@
     <%- include('partials/navigation') %>
         <div class="container border border-1 bg-opacity-6 border-secondary rounded-pill bg-light  text-center p-3"
             style="margin-top:30px">
-
             <!-- Seller Search -->
-
             <div class="col-md-3">
                 <div class="d-flex">
                     <div class="col-auto">
@@ -58,7 +56,7 @@
             </div>
             <!-- Apply Button -->
             <div class="col-md-1">
-                <button class="btn btn-outline-success loaderbtn" ONCLICK="dataload()">Apply</button>
+                <button class="btn btn-outline-success loaderbtn" ONCLICK="dataload2()">Apply</button>
             </div>
             <!-- Reset Button -->
             <div class="col-md-1">
@@ -82,7 +80,7 @@
     $("#tableDisplay").css("height", (screen.height) - 330);
 
     // GET DATA from DB
-
+    var a;
     var url = '/portal/lf/data';
     dataload();
 
@@ -93,11 +91,12 @@
         document.getElementById('INVOICE').value = '';
         document.getElementById('Seller').value = '';
         document.getElementById('Vendor').value = '';
-        dataload();
+        dataload2();
     }
 
     // Load Data to Filters and Table
     function dataload() {
+
         showloader();
         var invoice_search = document.getElementById('INVOICE').value;
         var seller_search = document.getElementById('Seller').value;
@@ -105,7 +104,9 @@
 
 
         d3.json(url, function (error, data) {
-
+            a = data;
+            // console.log(typeof data);
+            // console.log(data);
             function tabulate(data, columns) {
 
                 var invoiceitems = [];
@@ -263,6 +264,182 @@
         });
     }
 
+
+
+    function dataload2() {
+        showloader();
+
+        var invoice_search = document.getElementById('INVOICE').value;
+        var seller_search = document.getElementById('Seller').value;
+        var vendor_search = document.getElementById('Vendor').value;
+
+
+      
+        var data = a;
+        function tabulate(data, columns) {
+
+            var invoiceitems = [];
+            var selleritems = [];
+            var vendoritems = [];
+
+            for (var i = 0; i < data.length; i++) {
+
+                if (invoiceitems.indexOf(data[i]['Invoice Number']) == -1) {
+                    invoiceitems.push(data[i]['Invoice Number']);
+                }
+
+                if (vendoritems.indexOf(data[i]['Vendor Name']) == -1) {
+                    vendoritems.push(data[i]['Vendor Name']);
+                }
+
+                if (selleritems.indexOf(data[i]['Seller Name']) == -1) {
+                    selleritems.push(data[i]['Seller Name']);
+                }
+            }
+
+
+            var table = d3.select('#tableDisplay').append('table')
+            var thead = table.append('thead')
+            var tbody = table.append('tbody');
+            // append the header row
+            thead.append('tr')
+                .selectAll('th')
+                .data(columns).enter()
+                .append('th')
+                .text(function (column) { return column; })
+                .style('background-color', '#96dafa')
+                .style('color', 'black')
+                .style('text-align', 'center')
+                .style('border', '1px solid #ddd')
+                .style('padding', '8px');
+
+            // create a row for each object in the data
+            var rows = tbody.selectAll('tr')
+                .data(data)
+                .enter()
+                .append('tr');
+
+            // create a cell in each row for each column
+            var cells = rows.selectAll('td')
+                .data(function (row) {
+                    return columns.map(function (column) {
+                        return { column: column, value: row[column] };
+                    });
+                })
+                .enter()
+                .append('td')
+                .text(function (d) { return d.value; })
+                .style('padding', '8px')
+                .style('border', '1px solid #ddd')
+                .style('background-color', '#f2f2f2')
+
+            //Push Data to Filters
+
+            document.getElementById('Vendors').textContent = "";
+            document.getElementById('INVOICES').textContent = "";
+            document.getElementById('Sellers').textContent = "";
+
+
+            vendoritems.forEach(function (item) {
+                $("#Vendors").append(`<option value='` + (item) + `'>`);
+            })
+
+            invoiceitems.forEach(function (item) {
+                $("#INVOICES").append(`<option value='` + (item) + `'>`);
+
+            })
+            selleritems.forEach(function (item) {
+                $("#Sellers").append(`<option value='` + (item) + `'>`);
+            })
+            hideloader();
+            return table;
+        }
+
+        // render the table(s)
+
+        if ((invoice_search.length > 1) || (seller_search.length > 1) || (vendor_search.length > 1)) {
+            document.getElementById('tableDisplay').textContent = "";
+            var filteritems = [];
+
+            // Invoice , Seller and vendor Search
+
+            if (((seller_search.length) > 1) && ((invoice_search.length) > 1) && ((vendor_search.length) > 1)) {
+                for (var j = 0; j < data.length; j++) {
+                    if (((data[j]['Seller Name']).includes(seller_search)) && ((data[j]['Invoice Number']).includes(invoice_search)) && ((data[j]['Vendor Name']).includes(vendor_search))) {
+                        filteritems.push(data[j]);
+                    }
+                }
+            }
+
+            // Invoice and Seller Search
+            else if (((seller_search.length) > 1) && ((invoice_search.length) > 1)) {
+                for (var j = 0; j < data.length; j++) {
+                    if (((data[j]['Seller Name']).includes(seller_search)) && ((data[j]['Invoice Number']).includes(invoice_search))) {
+                        filteritems.push(data[j]);
+                    }
+                }
+            }
+
+            // Vendor and Seller Search
+            else if (((seller_search.length) > 1) && ((vendor_search.length) > 1)) {
+                for (var j = 0; j < data.length; j++) {
+                    if (((data[j]['Seller Name']).includes(seller_search)) && ((data[j]['Vendor Name']).includes(vendor_search))) {
+                        filteritems.push(data[j]);
+                       
+                    }
+                }
+            }
+
+            // Vendor and invoice Search
+            else if (((invoice_search.length) > 1) && ((vendor_search.length) > 1)) {
+                for (var j = 0; j < data.length; j++) {
+                    if (((data[j]['Invoice Number']).includes(invoice_search)) && ((data[j]['Vendor Name']).includes(vendor_search))) {
+                        filteritems.push(data[j]);
+                    }
+                }
+            }
+
+            // Invoice search
+            else if ((invoice_search.length > 1)) {
+                for (var i = 0; i < data.length; i++) {
+                    if ((data[i]['Invoice Number']).includes(invoice_search)) {
+                        filteritems.push(data[i]);
+                    }
+                }
+            }
+
+            // Seller Search
+            else if ((seller_search.length) > 1) {
+                for (var j = 0; j < data.length; j++) {
+                    if ((data[j]['Seller Name']).includes(seller_search)) {
+                        filteritems.push(data[j]);
+                    }
+                }
+            }
+
+            // Vendor Search
+            else if ((vendor_search.length) > 1) {
+                for (var j = 0; j < data.length; j++) {
+                    if ((data[j]['Vendor Name']).includes(vendor_search)) {
+                        filteritems.push(data[j]);
+                    }
+                }
+            }
+
+            tabulate(filteritems, Object.keys(data[0]));
+        }
+        else {
+            document.getElementById('tableDisplay').textContent = "";
+            tabulate(data, Object.keys(data[0])); // 2 column table
+        }
+
+        // }
+
+        // );
+    }
+
+
+// console.log("im here"+a);
 </script>
 
 </html>
